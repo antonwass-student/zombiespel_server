@@ -20,6 +20,8 @@ exit
 
 //hejhej
 
+//hej på dig anton!
+
 typedef enum {
     OBJECT_ZOMBIE_NORMAL,
     OBJECT_WALL,
