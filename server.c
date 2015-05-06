@@ -15,8 +15,10 @@ exit
 #define N_CLIENTS 2
 
 
-#include "SDL2_net/SDL_net.h" //mac
-//#include "SDL2/SDL_net.h"
+//#include "SDL2_net/SDL_net.h" //mac
+#include "SDL2/SDL_net.h"
+
+//hejhej
 
 typedef enum {
     OBJECT_ZOMBIE_NORMAL,
@@ -49,14 +51,14 @@ pthread_mutex_t object_mutex=PTHREAD_MUTEX_INITIALIZER;
 
 
 int Converter_BytesToInt32(char data[], int* index){
-    
+
     int value;
-    
+
     value = ((int)data[*index] << 24) + ((int)data[*index + 1] << 16)
     + ((int)data[*index + 2] << 8) + ((int)data[*index + 3]);
-    
+
     *index += 4;
-    
+
     return value;
 }
 
@@ -67,7 +69,7 @@ int Converter_Int32ToBytes(char data[], int* size, int value)
     data[*size + 2] = value >> 8;
     data[*size + 3] = value;
     *size += 4;
-    
+
     return 0;
 }
 
@@ -79,13 +81,13 @@ void SendObjectPos(int objId, int x, int y, int angle){
     Converter_Int32ToBytes(msg, &index, x);
     Converter_Int32ToBytes(msg, &index, y);
     Converter_Int32ToBytes(msg, &index, angle);
-    
+
     for(i=0;i<N_CLIENTS;i++)
     {
         if(client[i].status == true)
             SDLNet_TCP_Send(client[i].socket, msg, 512);
     }
-    
+
 }
 
 void SendNewObject(int objId, int x, int y, objectType_t type){
@@ -96,13 +98,13 @@ void SendNewObject(int objId, int x, int y, objectType_t type){
     Converter_Int32ToBytes(msg, &index, x);
     Converter_Int32ToBytes(msg, &index, y);
     msg[index++]=type;
-    
+
     for(i=0;i<N_CLIENTS;i++)
     {
         if(client[i].status == true)
             SDLNet_TCP_Send(client[i].socket, msg, 512);
     }
-    
+
 }
 
 int AddObject(GameObject objects[], GameObject object, int *size)
@@ -125,15 +127,15 @@ int RemoveObject(GameObject objects[], int id, int *size)
             index=i;
             break;
         }
-        
+
     }
-    
+
     if(index==-1){
         pthread_mutex_unlock(&object_mutex);
         return -1;
     }
-    
-    
+
+
     for(i=index;i<(*size)-1;i++)
     {
         objects[i]=objects[i+1];
@@ -185,10 +187,10 @@ void* client_process(void* arg)
     while (!quit)
     {
         //SDL_Delay(10);
-        
+
         if (SDLNet_TCP_Recv(client[i].socket, buffer, 512) > 0)
         {
-            
+
             printf("Client %d says: %s\n", i, buffer);
             SDLNet_TCP_Send(client[i].socket, buffer, sizeof(buffer));
             if(strcmp(buffer, "exit") == 0)	/* Terminate this connection */
@@ -207,27 +209,27 @@ void* client_handle(void* arg){
     TCPsocket sd, csd, tmp; /* Socket descriptor, Client socket descriptor */
     IPaddress ip, *remoteIP;
     int listening = 1, i=0;
-    
+
     if (SDLNet_Init() < 0)
     {
         fprintf(stderr, "SDLNet_Init: %s\n", SDLNet_GetError());
         exit(EXIT_FAILURE);
     }
-    
+
     /* Resolving the host using NULL make network interface to listen */
     if (SDLNet_ResolveHost(&ip, NULL, 2000) < 0)
     {
         fprintf(stderr, "SDLNet_ResolveHost: %s\n", SDLNet_GetError());
         exit(EXIT_FAILURE);
     }
-    
+
     /* Open a connection with the IP provided (listen on the host's port) */
     if (!(sd = SDLNet_TCP_Open(&ip)))
     {
         fprintf(stderr, "SDLNet_TCP_Open: %s\n", SDLNet_GetError());
         exit(EXIT_FAILURE);
     }
-    
+
     while (listening)
     {
         /* Our server should always accept new connections but close them if server full */
@@ -235,14 +237,14 @@ void* client_handle(void* arg){
         {
             /* Now we can communicate with the client using csd socket
              * sd will remain opened waiting other connections */
-            
+
             /* Get the remote address */
             if ((remoteIP = SDLNet_TCP_GetPeerAddress(csd)))
             /* Print the address, converting in the host format */
                 printf("Host connected: %x %d\n", SDLNet_Read32(&remoteIP->host), SDLNet_Read16(&remoteIP->port));
             else
                 fprintf(stderr, "SDLNet_TCP_GetPeerAddress: %s\n", SDLNet_GetError());
-            
+
             int sockets_available=1;
             if (sockets_available)
             {
@@ -259,7 +261,7 @@ void* client_handle(void* arg){
                         continue;
                 }
             }
-            
+
             else
             {
                 tmp = csd;
@@ -269,14 +271,14 @@ void* client_handle(void* arg){
                 SDLNet_TCP_Close(tmp);
             }
         }
-        
+
     }
-    
-    
+
+
     //SDLNet_TCP_Close(csd);
     SDLNet_TCP_Close(sd);
     SDLNet_Quit();
-    
+
     return EXIT_SUCCESS;
 }
 
