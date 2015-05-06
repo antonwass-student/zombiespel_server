@@ -5,6 +5,19 @@ gcc -Wall `sdl-config --cflags` tcps.c -o tcps `sdl-config --libs` -lSDL_net -pt
 exit
 #endif
 
+#ifdef _WIN32
+//define something for Windows (32-bit and 64-bit, this part is common)
+#include <SDL.h>
+#include <SDL_net.h>
+
+#elif __APPLE__
+#include <SDL2/SDL.h>
+#include "SDL2_net/SDL_net.h" 
+
+#elif __linux
+#include "SDL2/SDL_net.h"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,14 +26,6 @@ exit
 #include <stdbool.h>
 
 #define N_CLIENTS 2
-
-
-//#include "SDL2_net/SDL_net.h" //mac
-#include "SDL2/SDL_net.h"
-
-//hejhej
-
-//hej på dig anton!
 
 typedef enum {
     OBJECT_ZOMBIE_NORMAL,
@@ -107,6 +112,37 @@ void SendNewObject(int objId, int x, int y, objectType_t type){
             SDLNet_TCP_Send(client[i].socket, msg, 512);
     }
 
+}
+
+void SendRemoveObject(int objId){
+    char msg[512];
+    int index=1, i;
+    msg[0]=6;
+    Converter_Int32ToBytes(msg, &index, objId);
+    
+    for(i=0;i<N_CLIENTS;i++)
+    {
+        if(client[i].status == true)
+            SDLNet_TCP_Send(client[i].socket, msg, 512);
+    }
+
+}
+
+void SendPlayerId(int PlayerId){
+    char msg[512];
+    int index=1, i;
+    msg[0]=7;
+    Converter_Int32ToBytes(msg, &index, PlayerId);
+    for(i=0;i<N_CLIENTS;i++)
+    {
+        if(client[i].status == true)
+            SDLNet_TCP_Send(client[i].socket, msg, 512);
+    }
+    
+}
+
+void RecvPlayerMove(int PlayerId, char vertical, char horizontal){
+    
 }
 
 int AddObject(GameObject objects[], GameObject object, int *size)
