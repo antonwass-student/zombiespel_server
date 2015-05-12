@@ -31,7 +31,7 @@ exit
 int main(int argc, char **argv)
 {
     RecvStack.size = 1;
-        int id=0, objectCount=0;
+    int id=0, objectCount=0;
     int deltaTime = SDL_GetTicks();
     GameObject objects[100];
     GameObject newObject;
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     //pthread_create(&broadcaster, NULL, &SendToAll, NULL);
     newObject=CreateZombie(0,0,id++);
     AddObject(objects, newObject, &objectCount);
-    SendNewObject(newObject.id, newObject.x, newObject.y, OBJECT_ZOMBIE_NORMAL);
+    SendNewObject(newObject.obj_id, newObject.x, newObject.y, OBJECT_ZOMBIE_NORMAL);
     int i;
     sleep(2);
     while (1) {
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
             if(objects[i].type==OBJECT_ZOMBIE_NORMAL)
             {
                 objects[i].x+=10;
-                SendObjectPos(objects[i].id, objects[i].x, objects[i].y, 0);
+                SendObjectPos(objects[i].obj_id, objects[i].x, objects[i].y, 0);
                 printf("Object moved\n");
             }
 
