@@ -10,8 +10,7 @@
 #define __SDL_net__client_process__
 
 #include <stdio.h>
-#include "server_structs.h"
-extern msg_stack RecvStack;
+
 void* client_process(void* arg);
 
 #endif /* defined(__SDL_net__client_process__) */

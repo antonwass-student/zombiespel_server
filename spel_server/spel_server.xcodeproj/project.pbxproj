@@ -14,6 +14,7 @@
 		CB764F0A1B02078A00BB3B7C /* spel_objects.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764F091B02078A00BB3B7C /* spel_objects.c */; };
 		CB764F0E1B0207AF00BB3B7C /* SDL2_net.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB764F0C1B0207AF00BB3B7C /* SDL2_net.framework */; };
 		CB764F0F1B0207AF00BB3B7C /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB764F0D1B0207AF00BB3B7C /* SDL2.framework */; };
+		CB764F131B025A8200BB3B7C /* server_structs.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764F121B025A8200BB3B7C /* server_structs.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,6 +43,7 @@
 		CB764F0B1B02078F00BB3B7C /* spel_objects.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = spel_objects.h; path = ../spel_objects.h; sourceTree = "<group>"; };
 		CB764F0C1B0207AF00BB3B7C /* SDL2_net.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_net.framework; path = ../../../Library/Frameworks/SDL2_net.framework; sourceTree = "<group>"; };
 		CB764F0D1B0207AF00BB3B7C /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		CB764F121B025A8200BB3B7C /* server_structs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = server_structs.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				CB764F051B02077C00BB3B7C /* net_msgs.c */,
 				CB764F071B02078200BB3B7C /* net_msgs.h */,
 				CB764F081B02078600BB3B7C /* server_structs.h */,
+				CB764F121B025A8200BB3B7C /* server_structs.c */,
 				CB764F091B02078A00BB3B7C /* spel_objects.c */,
 				CB764F0B1B02078F00BB3B7C /* spel_objects.h */,
 				CB764EF41B0206F300BB3B7C /* spel_server */,
@@ -149,6 +152,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB764EFD1B02071100BB3B7C /* main.c in Sources */,
+				CB764F131B025A8200BB3B7C /* server_structs.c in Sources */,
 				CB764F0A1B02078A00BB3B7C /* spel_objects.c in Sources */,
 				CB764F021B02073C00BB3B7C /* client_process.c in Sources */,
 				CB764EFF1B02072B00BB3B7C /* client_handler.c in Sources */,

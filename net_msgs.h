@@ -11,7 +11,10 @@
 
 #include <stdio.h>
 #include "server_structs.h"
+extern msg_stack recvPool;
 
+void poolInit();
+int AddToPool(char* msg);
 void SendObjectPos(int objId, int x, int y, int angle);
 void SendNewObject(int objId, int x, int y, objectType_t type);
 void SendRemoveObject(int objId);

@@ -16,25 +16,23 @@
 
 #include <stdbool.h>
 #include <pthread.h>
+
 #include "client_handler.h"
 #include "server_structs.h"
 #include "client_process.h"
-#include "net_msgs.h"
 #include "spel_objects.h"
 
 #define N_CLIENTS 2
-
-
-
 
 
 void* client_handle(void* objs){
     TCPsocket sd, csd, tmp; /* Socket descriptor, Client socket descriptor */
     IPaddress ip, *remoteIP;
     int listening = 1, i=0, id=0, objectCount;
+    int sockets_available=1;
     GameObject objects[100]; //= *(GameObject*) objs;
     GameObject player;
-    
+
     
     
     if (SDLNet_Init() < 0)
@@ -72,7 +70,6 @@ void* client_handle(void* objs){
             else
                 fprintf(stderr, "SDLNet_TCP_GetPeerAddress: %s\n", SDLNet_GetError());
             
-            int sockets_available=1;
             if (sockets_available)
             {
                 for(i=0; i<N_CLIENTS;i++){

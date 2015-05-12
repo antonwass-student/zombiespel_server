@@ -13,10 +13,21 @@
 #include "SDL2/SDL_net.h"
 #endif
 
-#include "net_msgs.h"
 #include "server_structs.h"
+#include "net_msgs.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <pthread.h>
+
 
 #define N_CLIENTS 2
+msg_stack recvPool;
+pthread_mutex_t pool_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+void poolInit(){
+    recvPool.size=0;
+}
 
 int Converter_BytesToInt32(char data[], int* index){
     
@@ -39,6 +50,16 @@ int Converter_Int32ToBytes(char data[], int* size, int value)
     *size += 4;
     
     return 0;
+}
+
+int AddToPool(char* msg) // Funktion fˆr att l‰gga till meddelanden i stacks ( pools).
+{
+    
+    pthread_mutex_lock(&pool_mutex);
+    memcpy(recvPool.queue[recvPool.size], msg, 512);
+    recvPool.size++;
+    pthread_mutex_unlock(&pool_mutex);
+    return 1;
 }
 
 void SendObjectPos(int objId, int x, int y, int angle)

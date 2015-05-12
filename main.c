@@ -19,26 +19,23 @@ exit
 #include <unistd.h>
 #include <pthread.h>
 #include <stdbool.h>
-#include "net_msgs.h"
-#include "client_handler.h"
+
 #include "spel_objects.h"
 #include "server_structs.h"
-#include "client_process.h"
-
-
+#include "client_handler.h"
+#include "net_msgs.h"
 
 
 int main(int argc, char **argv)
 {
-    RecvStack.size = 1;
     int id=0, objectCount=0;
     int deltaTime = SDL_GetTicks();
     GameObject objects[100];
     GameObject newObject;
+    poolInit();
     pthread_t listener;
     pthread_create(&listener,NULL, &client_handle, (void*)objects);
     sleep(10);
-    //pthread_create(&broadcaster, NULL, &SendToAll, NULL);
     newObject=CreateZombie(0,0,id++);
     AddObject(objects, newObject, &objectCount);
     SendNewObject(newObject.obj_id, newObject.x, newObject.y, OBJECT_ZOMBIE_NORMAL);

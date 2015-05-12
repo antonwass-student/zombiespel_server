@@ -15,8 +15,7 @@
 
 #include "client_process.h"
 #include "server_structs.h"
-
-msg_stack RecvStack;
+#include "net_msgs.h"
 
 void* client_process(void* arg)
 {
@@ -31,7 +30,7 @@ void* client_process(void* arg)
         {
             
             printf("Client %d says: %s\n", i, buffer);
-            SDLNet_TCP_Send(client[i].socket, buffer, sizeof(buffer));
+            AddToPool(buffer);
             if(strcmp(buffer, "exit") == 0)	/* Terminate this connection */
             {
                 quit = 1;

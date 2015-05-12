@@ -15,9 +15,6 @@
 
 #include <stdio.h>
 #include <pthread.h>
-#include "spel_objects.h"
-#include "net_msgs.h"
-#include "client_handler.h"
 #include "server_structs.h"
 
 pthread_mutex_t object_mutex=PTHREAD_MUTEX_INITIALIZER;

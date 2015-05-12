@@ -11,10 +11,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
-#include <pthread.h>
-
 #define N_CLIENTS 2
-pthread_mutex_t queue_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 typedef struct  {
     char name[20];
@@ -43,10 +40,11 @@ typedef struct{
 typedef struct{
     char queue[128][512]; //Kö från klienterna till main
     int size;
-
+    
 }msg_stack;
 
-Connections client[N_CLIENTS];
+extern Connections client[N_CLIENTS];
+
 
 
 #endif /* defined(__SDL_net__server_structs__) */
