@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CB764EFD1B02071100BB3B7C /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764EFC1B02071100BB3B7C /* main.c */; };
-		CB764EFF1B02072B00BB3B7C /* client_handler.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764EFE1B02072B00BB3B7C /* client_handler.c */; };
-		CB764F021B02073C00BB3B7C /* client_process.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764F011B02073C00BB3B7C /* client_process.c */; };
-		CB764F061B02077C00BB3B7C /* net_msgs.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764F051B02077C00BB3B7C /* net_msgs.c */; };
-		CB764F0A1B02078A00BB3B7C /* spel_objects.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764F091B02078A00BB3B7C /* spel_objects.c */; };
-		CB764F0E1B0207AF00BB3B7C /* SDL2_net.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB764F0C1B0207AF00BB3B7C /* SDL2_net.framework */; };
-		CB764F0F1B0207AF00BB3B7C /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB764F0D1B0207AF00BB3B7C /* SDL2.framework */; };
-		CB764F131B025A8200BB3B7C /* server_structs.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764F121B025A8200BB3B7C /* server_structs.c */; };
-		CB764F161B025FEA00BB3B7C /* pool_reader.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764F141B025FEA00BB3B7C /* pool_reader.c */; };
+		CB764F191B0274F000BB3B7C /* SDL2_net.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB764F171B0274F000BB3B7C /* SDL2_net.framework */; };
+		CB764F1A1B0274F000BB3B7C /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB764F181B0274F000BB3B7C /* SDL2.framework */; };
+		CB764F1C1B02751200BB3B7C /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764F1B1B02751200BB3B7C /* main.c */; };
+		CB764F291B02752700BB3B7C /* client_handler.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764F1D1B02752700BB3B7C /* client_handler.c */; };
+		CB764F2A1B02752700BB3B7C /* client_process.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764F1F1B02752700BB3B7C /* client_process.c */; };
+		CB764F2B1B02752700BB3B7C /* net_msgs.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764F211B02752700BB3B7C /* net_msgs.c */; };
+		CB764F2C1B02752700BB3B7C /* pool_reader.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764F231B02752700BB3B7C /* pool_reader.c */; };
+		CB764F2D1B02752700BB3B7C /* server_structs.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764F251B02752700BB3B7C /* server_structs.c */; };
+		CB764F2E1B02752700BB3B7C /* spel_objects.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764F271B02752700BB3B7C /* spel_objects.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,21 +32,21 @@
 
 /* Begin PBXFileReference section */
 		CB764EF21B0206F300BB3B7C /* spel_server */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = spel_server; sourceTree = BUILT_PRODUCTS_DIR; };
-		CB764EFC1B02071100BB3B7C /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = main.c; path = ../main.c; sourceTree = "<group>"; };
-		CB764EFE1B02072B00BB3B7C /* client_handler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = client_handler.c; path = ../client_handler.c; sourceTree = "<group>"; };
-		CB764F001B02073300BB3B7C /* client_handler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = client_handler.h; path = ../client_handler.h; sourceTree = "<group>"; };
-		CB764F011B02073C00BB3B7C /* client_process.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = client_process.c; path = ../client_process.c; sourceTree = "<group>"; };
-		CB764F041B02076700BB3B7C /* client_process.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = client_process.h; path = ../client_process.h; sourceTree = "<group>"; };
-		CB764F051B02077C00BB3B7C /* net_msgs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = net_msgs.c; path = ../net_msgs.c; sourceTree = "<group>"; };
-		CB764F071B02078200BB3B7C /* net_msgs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = net_msgs.h; path = ../net_msgs.h; sourceTree = "<group>"; };
-		CB764F081B02078600BB3B7C /* server_structs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = server_structs.h; path = ../server_structs.h; sourceTree = "<group>"; };
-		CB764F091B02078A00BB3B7C /* spel_objects.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = spel_objects.c; path = ../spel_objects.c; sourceTree = "<group>"; };
-		CB764F0B1B02078F00BB3B7C /* spel_objects.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = spel_objects.h; path = ../spel_objects.h; sourceTree = "<group>"; };
-		CB764F0C1B0207AF00BB3B7C /* SDL2_net.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_net.framework; path = ../../../Library/Frameworks/SDL2_net.framework; sourceTree = "<group>"; };
-		CB764F0D1B0207AF00BB3B7C /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
-		CB764F121B025A8200BB3B7C /* server_structs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = server_structs.c; sourceTree = "<group>"; };
-		CB764F141B025FEA00BB3B7C /* pool_reader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pool_reader.c; sourceTree = "<group>"; };
-		CB764F151B025FEA00BB3B7C /* pool_reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pool_reader.h; sourceTree = "<group>"; };
+		CB764F171B0274F000BB3B7C /* SDL2_net.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_net.framework; path = ../../Library/Frameworks/SDL2_net.framework; sourceTree = "<group>"; };
+		CB764F181B0274F000BB3B7C /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		CB764F1B1B02751200BB3B7C /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		CB764F1D1B02752700BB3B7C /* client_handler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client_handler.c; sourceTree = "<group>"; };
+		CB764F1E1B02752700BB3B7C /* client_handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client_handler.h; sourceTree = "<group>"; };
+		CB764F1F1B02752700BB3B7C /* client_process.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client_process.c; sourceTree = "<group>"; };
+		CB764F201B02752700BB3B7C /* client_process.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client_process.h; sourceTree = "<group>"; };
+		CB764F211B02752700BB3B7C /* net_msgs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = net_msgs.c; sourceTree = "<group>"; };
+		CB764F221B02752700BB3B7C /* net_msgs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = net_msgs.h; sourceTree = "<group>"; };
+		CB764F231B02752700BB3B7C /* pool_reader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pool_reader.c; sourceTree = "<group>"; };
+		CB764F241B02752700BB3B7C /* pool_reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pool_reader.h; sourceTree = "<group>"; };
+		CB764F251B02752700BB3B7C /* server_structs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = server_structs.c; sourceTree = "<group>"; };
+		CB764F261B02752700BB3B7C /* server_structs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = server_structs.h; sourceTree = "<group>"; };
+		CB764F271B02752700BB3B7C /* spel_objects.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = spel_objects.c; sourceTree = "<group>"; };
+		CB764F281B02752700BB3B7C /* spel_objects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spel_objects.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,8 +54,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CB764F0E1B0207AF00BB3B7C /* SDL2_net.framework in Frameworks */,
-				CB764F0F1B0207AF00BB3B7C /* SDL2.framework in Frameworks */,
+				CB764F191B0274F000BB3B7C /* SDL2_net.framework in Frameworks */,
+				CB764F1A1B0274F000BB3B7C /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,21 +65,21 @@
 		CB764EE91B0206F300BB3B7C = {
 			isa = PBXGroup;
 			children = (
-				CB764F0C1B0207AF00BB3B7C /* SDL2_net.framework */,
-				CB764F0D1B0207AF00BB3B7C /* SDL2.framework */,
-				CB764EFC1B02071100BB3B7C /* main.c */,
-				CB764F141B025FEA00BB3B7C /* pool_reader.c */,
-				CB764F151B025FEA00BB3B7C /* pool_reader.h */,
-				CB764EFE1B02072B00BB3B7C /* client_handler.c */,
-				CB764F001B02073300BB3B7C /* client_handler.h */,
-				CB764F011B02073C00BB3B7C /* client_process.c */,
-				CB764F041B02076700BB3B7C /* client_process.h */,
-				CB764F051B02077C00BB3B7C /* net_msgs.c */,
-				CB764F071B02078200BB3B7C /* net_msgs.h */,
-				CB764F081B02078600BB3B7C /* server_structs.h */,
-				CB764F121B025A8200BB3B7C /* server_structs.c */,
-				CB764F091B02078A00BB3B7C /* spel_objects.c */,
-				CB764F0B1B02078F00BB3B7C /* spel_objects.h */,
+				CB764F1B1B02751200BB3B7C /* main.c */,
+				CB764F1D1B02752700BB3B7C /* client_handler.c */,
+				CB764F1E1B02752700BB3B7C /* client_handler.h */,
+				CB764F1F1B02752700BB3B7C /* client_process.c */,
+				CB764F201B02752700BB3B7C /* client_process.h */,
+				CB764F211B02752700BB3B7C /* net_msgs.c */,
+				CB764F221B02752700BB3B7C /* net_msgs.h */,
+				CB764F231B02752700BB3B7C /* pool_reader.c */,
+				CB764F241B02752700BB3B7C /* pool_reader.h */,
+				CB764F251B02752700BB3B7C /* server_structs.c */,
+				CB764F261B02752700BB3B7C /* server_structs.h */,
+				CB764F271B02752700BB3B7C /* spel_objects.c */,
+				CB764F281B02752700BB3B7C /* spel_objects.h */,
+				CB764F171B0274F000BB3B7C /* SDL2_net.framework */,
+				CB764F181B0274F000BB3B7C /* SDL2.framework */,
 				CB764EF41B0206F300BB3B7C /* spel_server */,
 				CB764EF31B0206F300BB3B7C /* Products */,
 			);
@@ -156,13 +156,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CB764EFD1B02071100BB3B7C /* main.c in Sources */,
-				CB764F131B025A8200BB3B7C /* server_structs.c in Sources */,
-				CB764F0A1B02078A00BB3B7C /* spel_objects.c in Sources */,
-				CB764F021B02073C00BB3B7C /* client_process.c in Sources */,
-				CB764EFF1B02072B00BB3B7C /* client_handler.c in Sources */,
-				CB764F061B02077C00BB3B7C /* net_msgs.c in Sources */,
-				CB764F161B025FEA00BB3B7C /* pool_reader.c in Sources */,
+				CB764F2C1B02752700BB3B7C /* pool_reader.c in Sources */,
+				CB764F2D1B02752700BB3B7C /* server_structs.c in Sources */,
+				CB764F2E1B02752700BB3B7C /* spel_objects.c in Sources */,
+				CB764F1C1B02751200BB3B7C /* main.c in Sources */,
+				CB764F2A1B02752700BB3B7C /* client_process.c in Sources */,
+				CB764F291B02752700BB3B7C /* client_handler.c in Sources */,
+				CB764F2B1B02752700BB3B7C /* net_msgs.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,6 +287,7 @@
 				CB764EFB1B0206F300BB3B7C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
