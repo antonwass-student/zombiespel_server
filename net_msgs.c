@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 project. All rights reserved.
 //
 #ifdef __APPLE__
-#include <SDL2/SDL.h>
 #include "SDL2_net/SDL_net.h"
 
 #elif __linux
@@ -36,7 +35,7 @@ int Converter_BytesToInt32(char data[], int* index){
     value = ((int)data[*index] << 24) + ((int)data[*index + 1] << 16)
     + ((int)data[*index + 2] << 8) + ((int)data[*index + 3]);
     
-    *index += 4;
+    (*index) += 4;
     
     return value;
 }
@@ -47,7 +46,7 @@ int Converter_Int32ToBytes(char data[], int* size, int value)
     data[*size + 1] = value >> 16;
     data[*size + 2] = value >> 8;
     data[*size + 3] = value;
-    *size += 4;
+    (*size) += 4;
     
     return 0;
 }
@@ -59,7 +58,7 @@ int AddToPool(char* msg) // Funktion fˆr att l‰gga till meddelanden i stacks 
     memcpy(recvPool.queue[recvPool.size], msg, 512);
     recvPool.size++;
     pthread_mutex_unlock(&pool_mutex);
-    return 1;
+    return 0;
 }
 
 void SendObjectPos(int objId, int x, int y, int angle)

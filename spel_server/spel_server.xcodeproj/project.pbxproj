@@ -15,6 +15,7 @@
 		CB764F0E1B0207AF00BB3B7C /* SDL2_net.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB764F0C1B0207AF00BB3B7C /* SDL2_net.framework */; };
 		CB764F0F1B0207AF00BB3B7C /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB764F0D1B0207AF00BB3B7C /* SDL2.framework */; };
 		CB764F131B025A8200BB3B7C /* server_structs.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764F121B025A8200BB3B7C /* server_structs.c */; };
+		CB764F161B025FEA00BB3B7C /* pool_reader.c in Sources */ = {isa = PBXBuildFile; fileRef = CB764F141B025FEA00BB3B7C /* pool_reader.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -44,6 +45,8 @@
 		CB764F0C1B0207AF00BB3B7C /* SDL2_net.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_net.framework; path = ../../../Library/Frameworks/SDL2_net.framework; sourceTree = "<group>"; };
 		CB764F0D1B0207AF00BB3B7C /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		CB764F121B025A8200BB3B7C /* server_structs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = server_structs.c; sourceTree = "<group>"; };
+		CB764F141B025FEA00BB3B7C /* pool_reader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pool_reader.c; sourceTree = "<group>"; };
+		CB764F151B025FEA00BB3B7C /* pool_reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pool_reader.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +68,8 @@
 				CB764F0C1B0207AF00BB3B7C /* SDL2_net.framework */,
 				CB764F0D1B0207AF00BB3B7C /* SDL2.framework */,
 				CB764EFC1B02071100BB3B7C /* main.c */,
+				CB764F141B025FEA00BB3B7C /* pool_reader.c */,
+				CB764F151B025FEA00BB3B7C /* pool_reader.h */,
 				CB764EFE1B02072B00BB3B7C /* client_handler.c */,
 				CB764F001B02073300BB3B7C /* client_handler.h */,
 				CB764F011B02073C00BB3B7C /* client_process.c */,
@@ -157,6 +162,7 @@
 				CB764F021B02073C00BB3B7C /* client_process.c in Sources */,
 				CB764EFF1B02072B00BB3B7C /* client_handler.c in Sources */,
 				CB764F061B02077C00BB3B7C /* net_msgs.c in Sources */,
+				CB764F161B025FEA00BB3B7C /* pool_reader.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

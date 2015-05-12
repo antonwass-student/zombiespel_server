@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 project. All rights reserved.
 //
 #ifdef __APPLE__
-#include <SDL2/SDL.h>
 #include "SDL2_net/SDL_net.h"
 
 #elif __linux
@@ -28,7 +27,6 @@ void* client_process(void* arg)
         
         if (SDLNet_TCP_Recv(client[i].socket, buffer, 512) > 0)
         {
-            
             printf("Client %d says: %s\n", i, buffer);
             AddToPool(buffer);
             if(strcmp(buffer, "exit") == 0)	/* Terminate this connection */

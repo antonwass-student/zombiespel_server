@@ -9,6 +9,13 @@
 #ifndef __SDL_net__server_structs__
 #define __SDL_net__server_structs__
 
+#ifdef __APPLE__
+#include "SDL2_net/SDL_net.h"
+
+#elif __linux
+#include "SDL2/SDL_net.h"
+#endif
+
 #include <stdio.h>
 #include <stdbool.h>
 #define N_CLIENTS 2

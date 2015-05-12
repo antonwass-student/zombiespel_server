@@ -24,11 +24,12 @@ exit
 #include "server_structs.h"
 #include "client_handler.h"
 #include "net_msgs.h"
+#include "pool_reader.h"
 
 
 int main(int argc, char **argv)
 {
-    int id=0, objectCount=0;
+    int id=0, objectCount=2;
     int deltaTime = SDL_GetTicks();
     GameObject objects[100];
     GameObject newObject;
@@ -42,7 +43,7 @@ int main(int argc, char **argv)
     int i;
     sleep(2);
     while (1) {
-        for(i=0;i<objectCount;i++)
+        /*for(i=0;i<objectCount;i++)
         {
             if(objects[i].type==OBJECT_ZOMBIE_NORMAL)
             {
@@ -51,7 +52,8 @@ int main(int argc, char **argv)
                 printf("Object moved\n");
             }
 
-        }
+        }*/
+        readPool(objects);
         deltaTime = SDL_GetTicks() - deltaTime;
         if (deltaTime < 17){
             SDL_Delay(17-deltaTime);

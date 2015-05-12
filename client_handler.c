@@ -28,7 +28,7 @@
 void* client_handle(void* objs){
     TCPsocket sd, csd, tmp; /* Socket descriptor, Client socket descriptor */
     IPaddress ip, *remoteIP;
-    int listening = 1, i=0, id=0, objectCount;
+    int listening = 1, i=0, id=0, objectCount=0;
     int sockets_available=1;
     GameObject objects[100]; //= *(GameObject*) objs;
     GameObject player;

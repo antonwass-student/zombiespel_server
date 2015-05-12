@@ -6,13 +6,6 @@
 //  Copyright (c) 2015 spel_server. All rights reserved.
 //
 
-#ifdef __APPLE__
-#include <SDL2/SDL.h>
-#include "SDL2_net/SDL_net.h"
-
-#elif __linux
-#include "SDL2/SDL_net.h"
-#endif
 
 #define N_CLIENTS 2
 #include <stdio.h>
