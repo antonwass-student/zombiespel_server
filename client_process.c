@@ -35,6 +35,7 @@ void* client_process(void* arg)
                 printf("Terminate connection\n");
             }
         }
+        
     }
     SDLNet_TCP_Close(client[i].socket);
     client[i].status = false;

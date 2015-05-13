@@ -43,9 +43,9 @@ int Converter_BytesToInt32(char data[], int* index){
 int Converter_Int32ToBytes(char data[], int* size, int value)
 {
     data[*size] = value >> 24;
-    data[*size + 1] = value >> 16;
-    data[*size + 2] = value >> 8;
-    data[*size + 3] = value;
+    data[(*size + 1)] = value >> 16;
+    data[(*size + 2)] = value >> 8;
+    data[(*size + 3)] = value;
     (*size) += 4;
     
     return 0;
@@ -112,17 +112,17 @@ void SendRemoveObject(int objId)
     
 }
 
-void SendPlayerId(int PlayerId){
+void SendPlayerId(int PlayerId, int i){
     char msg[512];
-    int index=1, i;
+    int index=1;
     msg[0]=7;
+    printf("playerid %d\n",PlayerId);
     Converter_Int32ToBytes(msg, &index, PlayerId);
-    for(i=0;i<N_CLIENTS;i++)
-    {
-        if(client[i].status == true)
-            SDLNet_TCP_Send(client[i].socket, msg, 512);
-    }
-    
+    SDLNet_TCP_Send(client[i].socket, msg, 512);
+    index=1;
+    int test;
+    test = Converter_BytesToInt32(msg, &index);
+    printf("%d",test);
 }
 
 void RecvPlayerMove(int PlayerId, char vertical, char horizontal){

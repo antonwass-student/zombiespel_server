@@ -29,20 +29,20 @@ exit
 
 int main(int argc, char **argv)
 {
-    int id=0, objectCount=2;
+    int id=0, objectCount=1;
     int deltaTime = SDL_GetTicks();
     GameObject objects[100];
     GameObject newObject;
     poolInit();
     pthread_t listener;
     pthread_create(&listener,NULL, &client_handle, (void*)objects);
-    sleep(10);
+    //sleep(5);
     newObject=CreateZombie(0,0,id++);
     AddObject(objects, newObject, &objectCount);
     SendNewObject(newObject.obj_id, newObject.x, newObject.y, OBJECT_ZOMBIE_NORMAL);
     int i;
-    sleep(2);
-    while (1) {
+    printf("Loopen startar...\n");
+   /* while (1) {
         /*for(i=0;i<objectCount;i++)
         {
             if(objects[i].type==OBJECT_ZOMBIE_NORMAL)
@@ -52,15 +52,15 @@ int main(int argc, char **argv)
                 printf("Object moved\n");
             }
 
-        }*/
+        }
         readPool(objects);
         deltaTime = SDL_GetTicks() - deltaTime;
         if (deltaTime < 17){
             SDL_Delay(17-deltaTime);
-            printf("%d\n",17-deltaTime);
+            //printf("%d\n",17-deltaTime);
         }
         deltaTime=SDL_GetTicks();
-    }
+    }*/
     pthread_join(listener, NULL);
     return EXIT_SUCCESS;
 }

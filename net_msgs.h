@@ -14,10 +14,12 @@
 extern msg_stack recvPool;
 
 void poolInit();
+int Converter_BytesToInt32(char data[], int* index);
+int Converter_Int32ToBytes(char data[], int* size, int value);
 int AddToPool(char* msg);
 void SendObjectPos(int objId, int x, int y, int angle);
 void SendNewObject(int objId, int x, int y, objectType_t type);
 void SendRemoveObject(int objId);
-void SendPlayerId(int PlayerId);
+void SendPlayerId(int PlayerId, int i);
 
 #endif /* defined(__SDL_net__net_msgs__) */

@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 spel_server. All rights reserved.
 //
 #ifdef __APPLE__
-#include <SDL2/SDL.h>
 #include "SDL2_net/SDL_net.h"
 
 #elif __linux
@@ -62,9 +61,13 @@ void player_shoot(int n, GameObject objects[100]){
     int angle = recvPool.queue[n][2];
 }
 
+void player_name(int n){
+    
+}
+
 void readPool(GameObject objects[100]){
     int i;
-    for(i=0;i<128;i++){
+    for(i=0;i<recvPool.size;i++){
         switch (recvPool.queue[i][0]) {
             case 1: //chatt
                 printf("%s",recvPool.queue[i]);
@@ -75,6 +78,10 @@ void readPool(GameObject objects[100]){
                 break;
             case 4: //player_shoot
                 player_shoot(i,objects);
+                break;
+            case 8: //send player_name
+                printf("Du fått medd 8\n");
+                player_name(i);
                 
                 break;
             default:

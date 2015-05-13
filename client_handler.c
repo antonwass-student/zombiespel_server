@@ -21,6 +21,7 @@
 #include "server_structs.h"
 #include "client_process.h"
 #include "spel_objects.h"
+#include "net_msgs.h"
 
 #define N_CLIENTS 2
 
@@ -30,6 +31,7 @@ void* client_handle(void* objs){
     IPaddress ip, *remoteIP;
     int listening = 1, i=0, id=0, objectCount=0;
     int sockets_available=1;
+    char msg[512];
     GameObject objects[100]; //= *(GameObject*) objs;
     GameObject player;
 
@@ -76,7 +78,24 @@ void* client_handle(void* objs){
                     if(client[i].status == false){
                         client[i].socket = csd;
                         client[i].status = true;
+                        
+                        //Väntar på msg 8.
+                        while (msg[0]!=8) {
+                            SDLNet_TCP_Recv(client[i].socket, msg, 512);//int nameLenght, str name
+                        }
+                        int j=1, name_Lenght = Converter_BytesToInt32(msg, &j);
+                        printf("lenght: %d\n", name_Lenght);
+                        printf("%c", msg[5]);
+                        for (j = 0; j<name_Lenght; j++) {
+                            client[i].name[j] = (char) msg[j+5];
+                        }
+                        
+                        printf("player name = %s", client[i].name);
                         player = CreatePlayer(0,0, id++);
+                        printf("obj id %d\n",player.obj_id);
+                        client[i].playerId = player.obj_id+1000;
+                        printf("client id %d\n",client[i].playerId);
+                        SendPlayerId(client[i].playerId, i);
                         AddObject(objects, player, &objectCount);
                         pthread_create(&client[i].tid, NULL, &client_process, &i);
                         break;//hittat en ledig plats
