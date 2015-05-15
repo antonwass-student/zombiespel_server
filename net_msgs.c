@@ -28,32 +28,35 @@ void poolInit(){
     recvPool.size=0;
 }
 
-int Converter_BytesToInt32(char data[], int* index){
-    
-    int value;
-    
-    value = ((int)data[*index] << 24) + ((int)data[*index + 1] << 16)
-    + ((int)data[*index + 2] << 8) + ((int)data[*index + 3]);
-    
-    (*index) += 4;
-    
+int Converter_BytesToInt32(unsigned char data[], int* index){ // Gör om en byte-array till en int.
+
+    int value = 0;
+    value += (((int)data[*index]) << 24);
+    value += (((int)data[*index + 1]) << 16);
+    value += (((int)data[*index + 2]) << 8);
+    value += (((int)data[*index + 3]));
+
+    *index += 4;
+
     return value;
 }
 
-int Converter_Int32ToBytes(char data[], int* size, int value)
+int Converter_Int32ToBytes(unsigned char data[], int* size, int value) //Gör om en int till en byte array.
 {
-    data[*size] = value >> 24;
-    data[(*size + 1)] = value >> 16;
-    data[(*size + 2)] = value >> 8;
-    data[(*size + 3)] = value;
-    (*size) += 4;
-    
+    int temp = value;
+    data[(*size + 3)] = (unsigned char)(value);
+    data[*size + 2] = (unsigned char)((value) >> 8);
+    data[*size + 1] = (unsigned char)((value) >> 16);
+    data[*size] = (unsigned char)((value) >> 24);
+
+    *size += 4;
+
     return 0;
 }
 
 int AddToPool(char* msg) // Funktion fˆr att l‰gga till meddelanden i stacks ( pools).
 {
-    
+
     pthread_mutex_lock(&pool_mutex);
     memcpy(recvPool.queue[recvPool.size], msg, 512);
     recvPool.size++;
@@ -70,13 +73,13 @@ void SendObjectPos(int objId, int x, int y, int angle)
     Converter_Int32ToBytes(msg, &index, x);
     Converter_Int32ToBytes(msg, &index, y);
     Converter_Int32ToBytes(msg, &index, angle);
-    
+
     for(i=0;i<N_CLIENTS;i++)
     {
         if(client[i].status == true)
             SDLNet_TCP_Send(client[i].socket, msg, 512);
     }
-    
+
 }
 
 void SendNewObject(int objId, int x, int y, objectType_t type)
@@ -88,13 +91,13 @@ void SendNewObject(int objId, int x, int y, objectType_t type)
     Converter_Int32ToBytes(msg, &index, x);
     Converter_Int32ToBytes(msg, &index, y);
     msg[index++]=type;
-    
+
     for(i=0;i<N_CLIENTS;i++)
     {
         if(client[i].status == true)
             SDLNet_TCP_Send(client[i].socket, msg, 512);
     }
-    
+
 }
 
 void SendRemoveObject(int objId)
@@ -103,13 +106,13 @@ void SendRemoveObject(int objId)
     int index=1, i;
     msg[0]=6;
     Converter_Int32ToBytes(msg, &index, objId);
-    
+
     for(i=0;i<N_CLIENTS;i++)
     {
         if(client[i].status == true)
             SDLNet_TCP_Send(client[i].socket, msg, 512);
     }
-    
+
 }
 
 void SendPlayerId(int PlayerId, int i){
@@ -126,5 +129,5 @@ void SendPlayerId(int PlayerId, int i){
 }
 
 void RecvPlayerMove(int PlayerId, char vertical, char horizontal){
-    
+
 }
