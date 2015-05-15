@@ -22,6 +22,6 @@ void SendNewObject(int objId, int x, int y, objectType_t type, int clientID);
 void SendRemoveObject(int objId);
 void SyncObjects(int clientID);
 void SendPlayerId(int PlayerId, int i);
-void RecvPlayerPos(char data[], GameObject objects[]);
+void RecvPlayerPos(char data[], Scene* scene);
 
 #endif /* defined(__SDL_net__net_msgs__) */

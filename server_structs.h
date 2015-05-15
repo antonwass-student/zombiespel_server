@@ -14,6 +14,7 @@
 
 #elif __linux
 #include "SDL2/SDL_net.h"
+#include "SDL2/SDL.h"
 #endif
 
 #include <stdio.h>
@@ -47,8 +48,9 @@ typedef struct{
 
 typedef struct{
     GameObject objects[128];
-    pthread_mutex_t object_mutex;
     int objCount;
+    int nextId;
+    SDL_mutex *obj_mutex;
 
 } Scene;
 
