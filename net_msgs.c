@@ -14,6 +14,7 @@
 
 #include "server_structs.h"
 #include "net_msgs.h"
+#include "spel_objects.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -28,7 +29,7 @@ void poolInit(){
     recvPool.size=0;
 }
 
-int Converter_BytesToInt32(unsigned char data[], int* index){ // Gör om en byte-array till en int.
+int Converter_BytesToInt32(char data[], int* index){ // Gör om en byte-array till en int.
 
     int value = 0;
     value += (((int)data[*index]) << 24);
@@ -41,13 +42,12 @@ int Converter_BytesToInt32(unsigned char data[], int* index){ // Gör om en byte
     return value;
 }
 
-int Converter_Int32ToBytes(unsigned char data[], int* size, int value) //Gör om en int till en byte array.
+int Converter_Int32ToBytes(char data[], int* size, int value) //Gör om en int till en byte array.
 {
-    int temp = value;
-    data[(*size + 3)] = (unsigned char)(value);
-    data[*size + 2] = (unsigned char)((value) >> 8);
-    data[*size + 1] = (unsigned char)((value) >> 16);
-    data[*size] = (unsigned char)((value) >> 24);
+    data[(*size + 3)] = ( char)(value);
+    data[*size + 2] = ( char)((value) >> 8);
+    data[*size + 1] = ( char)((value) >> 16);
+    data[*size] = ( char)((value) >> 24);
 
     *size += 4;
 
@@ -66,7 +66,7 @@ int AddToPool(char* msg) // Funktion fˆr att l‰gga till meddelanden i stacks 
 
 void SendObjectPos(int objId, int x, int y, int angle)
 {
-    char msg[512];
+     char msg[512];
     int index=1, i;
     msg[0]=2;
     Converter_Int32ToBytes(msg, &index, objId);
@@ -82,27 +82,29 @@ void SendObjectPos(int objId, int x, int y, int angle)
 
 }
 
-void SendNewObject(int objId, int x, int y, objectType_t type)
+void SendNewObject(int objId, int x, int y, objectType_t type, int clientID)
 {
-    char msg[512];
+     char msg[512];
     int index=1, i;
     msg[0]=5;
     Converter_Int32ToBytes(msg, &index, objId);
     Converter_Int32ToBytes(msg, &index, x);
     Converter_Int32ToBytes(msg, &index, y);
     msg[index++]=type;
+    SDLNet_TCP_Send(client[clientID].socket, msg, 512);
+}
 
-    for(i=0;i<N_CLIENTS;i++)
-    {
-        if(client[i].status == true)
-            SDLNet_TCP_Send(client[i].socket, msg, 512);
+void SyncObjects(int clientID){
+    int i;
+    for (i=0; i<objCount; i++) {
+        //SendNewObject(objects[i], int y, objectType_t type, int clientID)
     }
-
+    
 }
 
 void SendRemoveObject(int objId)
 {
-    char msg[512];
+     char msg[512];
     int index=1, i;
     msg[0]=6;
     Converter_Int32ToBytes(msg, &index, objId);
@@ -116,7 +118,7 @@ void SendRemoveObject(int objId)
 }
 
 void SendPlayerId(int PlayerId, int i){
-    char msg[512];
+     char msg[512];
     int index=1;
     msg[0]=7;
     printf("playerid %d\n",PlayerId);
@@ -128,6 +130,28 @@ void SendPlayerId(int PlayerId, int i){
     printf("%d",test);
 }
 
-void RecvPlayerMove(int PlayerId, char vertical, char horizontal){
 
+void RecvPlayerPos(char data[], GameObject objects[]){
+    int index = 1;
+    int playerId, x, y, angle;
+    printf("received player pos\n");
+    
+    playerId = Converter_BytesToInt32(data, &index);
+    x = Converter_BytesToInt32(data, &index);
+    y = Converter_BytesToInt32(data, &index);
+    angle = (float)Converter_BytesToInt32(data, &index);
+    
+    printf("player pos x=%d, y=%d, angle=%d\n",x, y, angle);
+    
+    for(int i = 0; i < 100; i++)
+    {
+        if(objects[i].obj_id + 1000 == playerId)
+        {
+            objects[i].x = x;
+            objects[i].y = y;
+            
+            break;
+        }
+    }
+    
 }
