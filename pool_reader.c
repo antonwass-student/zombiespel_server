@@ -34,38 +34,17 @@ void chat_msg(int n){
 
 }
 
-void player_move(int n, GameObject objects[100]){
-    //int playerId, char vertical, char horizontal
-    int id = recvPool.queue[n][1];
-    char vertical = recvPool.queue[n][2];
-    char horizontal =recvPool.queue[n][3];
-
-    if (horizontal== 'a')
-        objects[id].x-=10;
-    else if (horizontal == 'd')
-        objects[id].x+=10;
-    else
-        ;//failade
-    
-    if (vertical == 's')
-        objects[id].y-=10;
-    else if (vertical == 'w')
-        objects[id].y+=10;
-    else
-        ;//failade
-}
-
-void player_shoot(int n, GameObject objects[100]){
+void player_shoot(int n, Scene* scene){
     //int playerId, int angle
     int id = recvPool.queue[n][1];
     int angle = recvPool.queue[n][2];
 }
 
 void player_name(int n){
-    
+
 }
 
-void readPool(GameObject objects[100]){
+void readPool(Scene *scene){
     int i;
     for(i=0;i<recvPool.size;i++){
         switch (recvPool.queue[i][0]) {
@@ -74,19 +53,21 @@ void readPool(GameObject objects[100]){
                 chat_msg(i);
                 break;
             case 3: //player_move
-                player_move(i, objects);
+                //player_move(recvPool.queue[i], objects);
+                RecvPlayerPos(recvPool.queue[i], scene);
                 break;
             case 4: //player_shoot
-                player_shoot(i,objects);
+                player_shoot(i, scene);
                 break;
             case 8: //send player_name
                 printf("Du fått medd 8\n");
                 player_name(i);
-                
+
                 break;
             default:
                 break;
         }
     }
-    
+    recvPool.size = 0;
+
 }

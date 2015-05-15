@@ -11,6 +11,6 @@
 
 #include <stdio.h>
 #include "spel_objects.h"
-void readPool(GameObject objects[100]);
+void readPool(Scene *scene);
 
 #endif /* defined(__spel_server__pool_reader__) */

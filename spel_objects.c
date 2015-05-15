@@ -10,43 +10,41 @@
 #include <pthread.h>
 #include "server_structs.h"
 
-pthread_mutex_t object_mutex=PTHREAD_MUTEX_INITIALIZER;
-
-int AddObject(GameObject objects[], GameObject object, int *size)
+int AddObject(Scene* scene, GameObject object)
 {
-    pthread_mutex_lock(&object_mutex);
-    objects[*size] = object;
-    (*size)++;
-    pthread_mutex_unlock(&object_mutex);
+    pthread_mutex_lock(&scene->object_mutex);
+    scene->objects[scene->objCount] = object;
+    scene->objCount++;
+    pthread_mutex_unlock(&scene->object_mutex);
     return 0;
 }
 
-int RemoveObject(GameObject objects[], int id, int *size)
+int RemoveObject(Scene* scene, int id)
 {
     int index= -1, i;
-    pthread_mutex_lock(&object_mutex);
-    for(i=0;i<(*size);i++)
+    pthread_mutex_lock(&scene->object_mutex);
+    for(i=0;i<scene->objCount;i++)
     {
-        if(objects[i].obj_id==id)
+        if(scene->objects[i].obj_id==id)
         {
             index=i;
             break;
         }
-        
+
     }
-    
+
     if(index==-1){
-        pthread_mutex_unlock(&object_mutex);
+        pthread_mutex_unlock(&scene->object_mutex);
         return -1;
     }
-    
-    
-    for(i=index;i<(*size)-1;i++)
+
+
+    for(i=index;i<scene->objCount-1;i++)
     {
-        objects[i]=objects[i+1];
+        scene->objects[i]=scene->objects[i+1];
     }
-    (*size)--;
-    pthread_mutex_unlock(&object_mutex);
+    scene->objCount--;
+    pthread_mutex_unlock(&scene->object_mutex);
     return 0;
 }
 

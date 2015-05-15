@@ -11,8 +11,8 @@
 
 #include <stdio.h>
 #include "server_structs.h"
-int AddObject(GameObject objects[], GameObject object, int *size);
-int RemoveObject(GameObject objects[], int id, int *size);
+int AddObject(Scene* scene, GameObject object);
+int RemoveObject(Scene* scene, int id);
 GameObject CreateZombie(int x, int y, int id);
 GameObject CreatePlayer(int x, int y, int id);
 

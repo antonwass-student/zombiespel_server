@@ -18,6 +18,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <pthread.h>
 #define N_CLIENTS 2
 
 typedef struct  {
@@ -33,7 +34,7 @@ typedef enum {
     OBJECT_WALL,
     OBJECT_MEDKIT,
     OBJECT_PLAYER
-    
+
 }objectType_t;
 
 typedef struct{
@@ -41,13 +42,20 @@ typedef struct{
     int x;
     int y;
     int obj_id;
-    
+
 }GameObject;
+
+typedef struct{
+    GameObject objects[128];
+    pthread_mutex_t object_mutex;
+    int objCount;
+
+} Scene;
 
 typedef struct{
     char queue[128][512]; //Kö från klienterna till main
     int size;
-    
+
 }msg_stack;
 
 extern Connections client[N_CLIENTS];
