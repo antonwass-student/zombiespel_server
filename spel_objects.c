@@ -13,17 +13,21 @@
 
 int AddObject(Scene* scene, GameObject object)
 {
-    SDL_LockMutex(&scene->obj_mutex);
+    SDL_LockMutex(scene->obj_mutex);
     scene->objects[scene->objCount] = object;
     scene->objCount++;
-    SDL_UnlockMutex(&scene->obj_mutex);
+    SDL_UnlockMutex(scene->obj_mutex);
+
+    //skicka till klienterna
+    SendNewObject(object.obj_id, object.x, object.y, object.type);
+
     return 0;
 }
 
 int RemoveObject(Scene* scene, int id)
 {
     int index= -1, i;
-    SDL_LockMutex(&scene->obj_mutex);
+    SDL_LockMutex(scene->obj_mutex);
     for(i=0;i<scene->objCount;i++)
     {
         if(scene->objects[i].obj_id==id)
@@ -35,7 +39,7 @@ int RemoveObject(Scene* scene, int id)
     }
 
     if(index==-1){
-        SDL_UnlockMutex(&scene->obj_mutex);
+        SDL_UnlockMutex(scene->obj_mutex);
         return -1;
     }
 
@@ -45,7 +49,7 @@ int RemoveObject(Scene* scene, int id)
         scene->objects[i]=scene->objects[i+1];
     }
     scene->objCount--;
-    SDL_UnlockMutex(&scene->obj_mutex);
+    SDL_UnlockMutex(scene->obj_mutex);
     return 0;
 }
 

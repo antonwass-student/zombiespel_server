@@ -44,7 +44,7 @@ int main(int argc, char **argv)
     pthread_t listener;
     pthread_create(&listener,NULL, &client_handle, (void*)&level);
     //sleep(5);
-    newObject=CreateZombie(0,0, level.nextId++);
+    newObject=CreateZombie(3000,600, level.nextId++);
     AddObject(&level, newObject);
     //SendNewObject(newObject.obj_id, newObject.x, newObject.y, OBJECT_ZOMBIE_NORMAL);
     int i;
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
         {
             if(level.objects[i].type==OBJECT_ZOMBIE_NORMAL)
             {
-                level.objects[i].x+=10;
+                //level.objects[i].x+=10;
                 //SendObjectPos(objects[i].obj_id, objects[i].x, objects[i].y, 0);
                 //printf("Object moved\n");
             }

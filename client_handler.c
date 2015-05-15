@@ -95,10 +95,10 @@ void* client_handle(void* objs){
                         client[i].playerId = player.obj_id+1500;
                         printf("client id %d\n",client[i].playerId);
                         SendPlayerId(client[i].playerId, i);
-
                         AddObject(level, player);
 
-                        //sync
+                        SendSyncObjects(i, level);
+                        printf("Objects synced. player is ready\n");
 
                         pthread_create(&client[i].tid, NULL, &client_process, &i);
                         break;//hittat en ledig plats

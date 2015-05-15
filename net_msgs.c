@@ -82,25 +82,40 @@ void SendObjectPos(int objId, int x, int y, int angle)
 
 }
 
-void SendNewObject(int objId, int x, int y, objectType_t type, int clientID)
+void SendNewObject(int objId, int x, int y, objectType_t type)
 {
-     char msg[512];
+    char msg[512];
     int index=1, i;
     msg[0]=5;
     Converter_Int32ToBytes(msg, &index, objId);
     Converter_Int32ToBytes(msg, &index, x);
     Converter_Int32ToBytes(msg, &index, y);
     msg[index++]=type;
-    SDLNet_TCP_Send(client[clientID].socket, msg, 512);
+
+    for(int i = 0; i < N_CLIENTS; i++)
+    {
+        if(client[i].status)
+            SDLNet_TCP_Send(client[i].socket, msg, 512);
+    }
+
 }
 
 void SendSyncObjects(int clientID, Scene* scene){
     int i;
-    for (i=0; i<scene->objCount; i++)
+    printf("sending sync objects.\n");
+    for(i = 0; i < scene->objCount; i++)
     {
-        //SendNewObject(scene->objects[i].obj_id, scene->objects[i].x, scene->objects[i].y, scene->objects[i].type, int clientID);
-    }
+        char msg[512];
+        int index=1;
+        msg[0]=5;
+        Converter_Int32ToBytes(msg, &index, scene->objects[i].obj_id);
+        Converter_Int32ToBytes(msg, &index, scene->objects[i].x);
+        Converter_Int32ToBytes(msg, &index, scene->objects[i].y);
+        msg[index++]=scene->objects[i].type;
 
+        SDLNet_TCP_Send(client[clientID].socket, msg, 512);
+        printf("object id %d was sent (X = %d)\n",scene->objects[i].obj_id, scene->objects[i].x);
+    }
 }
 
 void SendRemoveObject(int objId)
@@ -125,10 +140,6 @@ void SendPlayerId(int PlayerId, int i){
     printf("playerid %d\n",PlayerId);
     Converter_Int32ToBytes(msg, &index, PlayerId);
     SDLNet_TCP_Send(client[i].socket, msg, 512);
-    index=1;
-    int test;
-    test = Converter_BytesToInt32(msg, &index);
-    printf("%d",test);
 }
 
 void RecvPlayerPos(char data[], Scene* scene){

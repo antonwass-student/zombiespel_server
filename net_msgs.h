@@ -18,7 +18,7 @@ int Converter_BytesToInt32(char data[], int* index);
 int Converter_Int32ToBytes(char data[], int* size, int value);
 int AddToPool(char* msg);
 void SendObjectPos(int objId, int x, int y, int angle);
-void SendNewObject(int objId, int x, int y, objectType_t type, int clientID);
+void SendNewObject(int objId, int x, int y, objectType_t type);
 void SendRemoveObject(int objId);
 void SyncObjects(int clientID);
 void SendPlayerId(int PlayerId, int i);
