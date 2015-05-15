@@ -128,6 +128,25 @@ void SendPlayerId(int PlayerId, int i){
     printf("%d",test);
 }
 
-void RecvPlayerMove(int PlayerId, char vertical, char horizontal){
+void RecvPlayerPos(char data[], GameObject objects[]){
+    int index = 1;
+    int playerId, x, y, angle;
+    printf("received player pos\n");
+
+    playerId = Converter_BytesToInt32(data, &index);
+    x = Converter_BytesToInt32(data, &index);
+    y = Converter_BytesToInt32(data, &index);
+    angle = (float)Converter_BytesToInt32(data, &index);
+
+    for(int i = 0; i < 100; i++)
+    {
+        if(objects[i].obj_id + 1000 == playerId)
+        {
+            objects[i].x = x;
+            objects[i].y = y;
+            printf("player pos x=%d, y=%d, angle=%d\n",x, y, angle);
+            break;
+        }
+    }
 
 }
