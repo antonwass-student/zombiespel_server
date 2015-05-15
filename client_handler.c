@@ -29,7 +29,7 @@
 void* client_handle(void* objs){
     TCPsocket sd, csd, tmp; /* Socket descriptor, Client socket descriptor */
     IPaddress ip, *remoteIP;
-    int listening = 1, i=0, id=0, objectCount=0;
+    int listening = 1, i=0;
     int sockets_available=1;
     char msg[512];
     Scene *level = (Scene*)objs;// = *(GameObject*) objs;
@@ -89,13 +89,17 @@ void* client_handle(void* objs){
                         }
 
                         printf("player name = %s", client[i].name);
-                        player = CreatePlayer(0,0, id++);
+                        player = CreatePlayer(0,0, level->nextId++);
+
                         printf("obj id %d\n",player.obj_id);
-                        client[i].playerId = player.obj_id+1000;
+                        client[i].playerId = player.obj_id+1500;
                         printf("client id %d\n",client[i].playerId);
                         SendPlayerId(client[i].playerId, i);
-                        //AddObject(objects, player, &objectCount);
+
                         AddObject(level, player);
+
+                        //sync
+
                         pthread_create(&client[i].tid, NULL, &client_process, &i);
                         break;//hittat en ledig plats
                     }

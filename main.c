@@ -31,27 +31,22 @@ int nextId = 0;
 
 int main(int argc, char **argv)
 {
-    char buffer[512];
-    int test = 1000;
-    int result = 0;
-    int testCount = 0;
-
-    int id=0, objectCount=1;
     int deltaTime = SDL_GetTicks();
     //GameObject objects[100];
     Scene level;
     GameObject newObject;
 
-    level.object_mutex;// = PTHREAD_MUTEX_INITIALIZER;
+    level.obj_mutex = SDL_CreateMutex();
     level.objCount = 0;
+    level.nextId = 100;
 
     poolInit();
     pthread_t listener;
     pthread_create(&listener,NULL, &client_handle, (void*)&level);
     //sleep(5);
-    newObject=CreateZombie(0,0,id++);
+    newObject=CreateZombie(0,0, level.nextId++);
     AddObject(&level, newObject);
-    SendNewObject(newObject.obj_id, newObject.x, newObject.y, OBJECT_ZOMBIE_NORMAL);
+    //SendNewObject(newObject.obj_id, newObject.x, newObject.y, OBJECT_ZOMBIE_NORMAL);
     int i;
     printf("Loopen startar...\n");
     while (1) {
