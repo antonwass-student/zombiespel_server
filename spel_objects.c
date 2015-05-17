@@ -19,7 +19,7 @@ int AddObject(Scene* scene, GameObject object)
     SDL_UnlockMutex(scene->obj_mutex);
 
     //skicka till klienterna
-    SendNewObject(object.obj_id, object.x, object.y, object.type);
+    SendNewObject(object.obj_id, object.rect.x, object.rect.y, object.type);
 
     return 0;
 }
@@ -56,19 +56,31 @@ int RemoveObject(Scene* scene, int id)
 GameObject CreateZombie(int x, int y, int id)
 {
     GameObject object;
-    object.x=x;
-    object.y=y;
+    object.rect.x=x;
+    object.rect.y=y;
     object.obj_id=id;
-    object.type=OBJECT_ZOMBIE_NORMAL;
+    object.type=OBJECT_NPC;
     return object;
 }
 
-GameObject CreatePlayer(int x, int y, int* id)
+GameObject CreatePlayer(int x, int y, int id)
 {
     GameObject object;
-    object.x=x;
-    object.y=y;
+    object.rect.x=x;
+    object.rect.y=y;
     object.obj_id = id;
     object.type=OBJECT_PLAYER;
     return object;
+}
+
+GameObject CreateBullet(int id, int x, int y, objectType_t type, int damage, int direction, int velocity)
+{
+    GameObject object;
+    object.rect.x = x;
+    object.rect.y = y;
+    object.obj_id = id;
+    object.type = type;
+
+    return object;
+
 }

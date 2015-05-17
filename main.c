@@ -25,6 +25,7 @@ exit
 #include "client_handler.h"
 #include "net_msgs.h"
 #include "pool_reader.h"
+#include "server_update.h"
 
 int nextId = 0;
 
@@ -32,6 +33,8 @@ int nextId = 0;
 int main(int argc, char **argv)
 {
     int deltaTime = SDL_GetTicks();
+    bool lobbyReady = false;
+    bool anyoneHere = false;
     //GameObject objects[100];
     Scene level;
     GameObject newObject;
@@ -41,25 +44,58 @@ int main(int argc, char **argv)
     level.nextId = 100;
 
     poolInit();
+    connectionInit();
     pthread_t listener;
+    printf("Starting listener thread.\n");
     pthread_create(&listener,NULL, &client_handle, (void*)&level);
-    //sleep(5);
-    newObject=CreateZombie(3000,600, level.nextId++);
-    AddObject(&level, newObject);
-    //SendNewObject(newObject.obj_id, newObject.x, newObject.y, OBJECT_ZOMBIE_NORMAL);
+
     int i;
-    printf("Loopen startar...\n");
-    while (1) {
-        for(i=0;i<level.objCount;i++)
+    printf("Lobby starting...\n");
+
+    while(!lobbyReady) //Lobby loop
+    {
+        readPool(&level);
+
+        for(int i = 0; i < N_CLIENTS; i++)
         {
-            if(level.objects[i].type==OBJECT_ZOMBIE_NORMAL)
+            if(client[i].status)
             {
-                //level.objects[i].x+=10;
-                //SendObjectPos(objects[i].obj_id, objects[i].x, objects[i].y, 0);
-                //printf("Object moved\n");
+                if(client[i].ready)
+                {
+                    lobbyReady = true;
+                }
+                else
+                {
+                    lobbyReady = false;
+                }
+
             }
         }
-        readPool(&level);
+
+        if (deltaTime < 17){
+            SDL_Delay(17-deltaTime);
+            //printf("%d\n",17-deltaTime);
+        }
+        deltaTime=SDL_GetTicks();
+    }
+    printf("Everyone is ready:\n");
+    printf("Game starting...\n");
+
+    SendGameStart();
+
+
+    //LoadLevel(&level); //Ladda in banans objekt
+    newObject=CreateZombie(3000,600, level.nextId++);
+    AddObject(&level, newObject);
+    //LoadPlayers(&level); //Ladda in spelare i banan
+
+
+    while (1)
+    { //GAMELOOP
+        readPool(&level);//Läser nätverksmeddelanden från klienter
+
+        Update(&level); //Uppdaterar alla objekt på servern
+
         deltaTime = SDL_GetTicks() - deltaTime;
         if (deltaTime < 17){
             SDL_Delay(17-deltaTime);
@@ -67,6 +103,7 @@ int main(int argc, char **argv)
         }
         deltaTime=SDL_GetTicks();
     }
+    printf("Server stopped\n");
     pthread_join(listener, NULL);
     return EXIT_SUCCESS;
 }

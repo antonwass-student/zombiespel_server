@@ -29,7 +29,15 @@ void poolInit(){
     recvPool.size=0;
 }
 
-int Converter_BytesToInt32(char data[], int* index){ // Gör om en byte-array till en int.
+void connectionInit()
+{
+    for(int i = 0; i < N_CLIENTS; i++)
+    {
+        client[i].ready = false;
+    }
+}
+
+int Converter_BytesToInt32(unsigned char data[], int* index){ // Gör om en byte-array till en int.
 
     int value = 0;
     value += (((int)data[*index]) << 24);
@@ -42,12 +50,12 @@ int Converter_BytesToInt32(char data[], int* index){ // Gör om en byte-array ti
     return value;
 }
 
-int Converter_Int32ToBytes(char data[], int* size, int value) //Gör om en int till en byte array.
+int Converter_Int32ToBytes(unsigned char data[], int* size, int value) //Gör om en int till en byte array.
 {
-    data[(*size + 3)] = ( char)(value);
-    data[*size + 2] = ( char)((value) >> 8);
-    data[*size + 1] = ( char)((value) >> 16);
-    data[*size] = ( char)((value) >> 24);
+    data[(*size + 3)] = (value);
+    data[*size + 2] = ((value) >> 8);
+    data[*size + 1] = ((value) >> 16);
+    data[*size] = ((value) >> 24);
 
     *size += 4;
 
@@ -92,7 +100,7 @@ void SendNewObject(int objId, int x, int y, objectType_t type)
     Converter_Int32ToBytes(msg, &index, y);
     msg[index++]=type;
 
-    for(int i = 0; i < N_CLIENTS; i++)
+    for(i = 0; i < N_CLIENTS; i++)
     {
         if(client[i].status)
             SDLNet_TCP_Send(client[i].socket, msg, 512);
@@ -100,7 +108,23 @@ void SendNewObject(int objId, int x, int y, objectType_t type)
 
 }
 
-void SendSyncObjects(int clientID, Scene* scene){
+void SendGameStart()
+{
+    char data[512];
+    data[0] = NET_GAME_START;
+
+    for(int j = 0; j < N_CLIENTS; j++)
+    {
+        if(client[j].status)
+        {
+            printf("Game start - sent\n");
+            SDLNet_TCP_Send(client[j].socket, data, 512);
+        }
+    }
+
+}
+
+void SendSyncObjects(Scene* scene){
     int i;
     printf("sending sync objects.\n");
     for(i = 0; i < scene->objCount; i++)
@@ -109,12 +133,18 @@ void SendSyncObjects(int clientID, Scene* scene){
         int index=1;
         msg[0]=5;
         Converter_Int32ToBytes(msg, &index, scene->objects[i].obj_id);
-        Converter_Int32ToBytes(msg, &index, scene->objects[i].x);
-        Converter_Int32ToBytes(msg, &index, scene->objects[i].y);
+        Converter_Int32ToBytes(msg, &index, scene->objects[i].rect.x);
+        Converter_Int32ToBytes(msg, &index, scene->objects[i].rect.y);
         msg[index++]=scene->objects[i].type;
 
-        SDLNet_TCP_Send(client[clientID].socket, msg, 512);
-        printf("object id %d was sent (X = %d)\n",scene->objects[i].obj_id, scene->objects[i].x);
+        for(int j = 0; j < N_CLIENTS; j++)
+        {
+            if(client[j].status)
+            {
+                SDLNet_TCP_Send(client[j].socket, msg, 512);
+                printf("object id %d was sent to '%d'\n",scene->objects[i].obj_id, client[j].name);
+            }
+        }
     }
 }
 
@@ -133,13 +163,58 @@ void SendRemoveObject(int objId)
 
 }
 
-void SendPlayerId(int PlayerId, int i){
-     char msg[512];
+void SendPlayerId(int PlayerId){
+    char msg[512];
     int index=1;
     msg[0]=7;
-    printf("playerid %d\n",PlayerId);
+    printf("Player id = '%d'\n",PlayerId);
     Converter_Int32ToBytes(msg, &index, PlayerId);
-    SDLNet_TCP_Send(client[i].socket, msg, 512);
+    printf("debug1\n");
+
+    for(int i = 0; i < N_CLIENTS; i++)
+    {
+        if(client[i].status == true)
+        {
+            if(client[i].playerId == PlayerId)
+            {
+                SDLNet_TCP_Send(client[i].socket, msg, 512);
+                break;
+            }
+
+        }
+    }
+
+
+}
+
+void SendLobbyPlayer(char* playerName, char pClass)
+{
+    char data[512];
+    int index = 1;
+    int length = strlen(playerName);
+
+    data[0] = 11;
+
+    Converter_Int32ToBytes(data, &index, length);
+
+    for(int i = 0; i < length; i++)
+    {
+        data[index + i] = playerName[i];
+    }
+    index += length;
+
+    data[index] = pClass;
+
+    for(int i = 0; i < N_CLIENTS; i++)
+    {
+        if(client[i].status == true)
+        {
+            if(strcmp(client[i].name, playerName))
+            {
+                SDLNet_TCP_Send(client[i].socket, data, 512);
+            }
+        }
+    }
 }
 
 void RecvPlayerPos(char data[], Scene* scene){
@@ -154,12 +229,27 @@ void RecvPlayerPos(char data[], Scene* scene){
 
     for(int i = 0; i < 128; i++)
     {
-        if(scene->objects[i].obj_id + 1500 == playerId)
+        if(scene->objects[i].obj_id == playerId)
         {
-            scene->objects[i].x = x;
-            scene->objects[i].y = y;
+            scene->objects[i].rect.x = x;
+            scene->objects[i].rect.y = y;
             printf("player pos x=%d, y=%d, angle=%d\n",x, y, angle);
             break;
+        }
+    }
+}
+
+void RecvPlayerReady(char data[])
+{
+    int index = 1;
+    int playerId = Converter_BytesToInt32(data, &index);
+
+    for(int i = 0; i < N_CLIENTS; i++)
+    {
+        if(client[i].status && client[i].playerId == playerId)
+        {
+            printf("Player %s is ready\n", client[i].name);
+            client[i].ready = true;
         }
     }
 }

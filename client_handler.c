@@ -81,24 +81,32 @@ void* client_handle(void* objs){
                         while (msg[0]!=8) {
                             SDLNet_TCP_Recv(client[i].socket, msg, 512);//int nameLenght, str name
                         }
-                        int j=1, name_Lenght = Converter_BytesToInt32(msg, &j);
-                        printf("lenght: %d\n", name_Lenght);
-                        printf("%c", msg[5]);
-                        for (j = 0; j<name_Lenght; j++) {
-                            client[i].name[j] = (char) msg[j+5];
+
+                        int index = 1;
+                        int nameLength = Converter_BytesToInt32(msg, &index);
+
+                        printf("Length = '%d'\n", nameLength);
+                        for (int j = 0; j<nameLength; j++) {
+                            client[i].name[j] = (char) msg[j+nameLength];
                         }
 
-                        printf("player name = %s", client[i].name);
+                        index+= nameLength;
+
+                        printf("Player name = %s\n", client[i].name);
                         player = CreatePlayer(0,0, level->nextId++);
 
-                        printf("obj id %d\n",player.obj_id);
-                        client[i].playerId = player.obj_id+1500;
-                        printf("client id %d\n",client[i].playerId);
-                        SendPlayerId(client[i].playerId, i);
-                        AddObject(level, player);
+                        printf("Player object id = %d\n", player.obj_id);
+                        client[i].playerId = player.obj_id;//+1500;
+                        printf("Connection id = %d\n",client[i].playerId);
 
+                        printf("Player class = %d at position %d\n", msg[index], index);
+                        SendLobbyPlayer(client[i].name, msg[index]);
+                        SendPlayerId(client[i].playerId);
+                        /*
+                        AddObject(level, player);
                         SendSyncObjects(i, level);
                         printf("Objects synced. player is ready\n");
+                        */
 
                         pthread_create(&client[i].tid, NULL, &client_process, &i);
                         break;//hittat en ledig plats

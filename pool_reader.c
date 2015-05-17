@@ -40,10 +40,6 @@ void player_shoot(int n, Scene* scene){
     int angle = recvPool.queue[n][2];
 }
 
-void player_name(int n){
-
-}
-
 void readPool(Scene *scene){
     int i;
     for(i=0;i<recvPool.size;i++){
@@ -52,17 +48,21 @@ void readPool(Scene *scene){
                 printf("%s",recvPool.queue[i]);
                 chat_msg(i);
                 break;
+            case 2: //chatt
+                printf("Message with id 2 was received\n");
+                break;
             case 3: //player_move
                 //player_move(recvPool.queue[i], objects);
                 RecvPlayerPos(recvPool.queue[i], scene);
                 break;
             case 4: //player_shoot
-                player_shoot(i, scene);
+                //player_shoot(i, scene);
                 break;
             case 8: //send player_name
-                printf("Du fått medd 8\n");
-                player_name(i);
-
+                printf("Message with ID 8 was received.\n");
+                break;
+            case 11:
+                RecvPlayerReady(recvPool.queue[i]);
                 break;
             default:
                 break;

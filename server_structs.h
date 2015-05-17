@@ -21,28 +21,129 @@
 #include <stdbool.h>
 #include <pthread.h>
 #define N_CLIENTS 2
+#define M_PI 3.14
+
+typedef enum{
+    NET_CHAT_MSG = 1,
+    NET_OBJECT_POS,
+    NET_PLAYER_MOVE,
+    NET_PLAYER_SHOOT,
+    NET_OBJECT_NEW,
+    NET_OBJECT_REMOVE,
+    NET_PLAYER_ID,
+    NET_PLAYER_NAME,
+    NET_PLAYER_STATS,
+    NET_LOBBY_PLAYER,
+    NET_PLAYER_READY,
+    NET_GAME_START
+} NetMessages_T;
+
+
+typedef enum {
+    CLASS_SOLDIER,
+    CLASS_SCOUT,
+    CLASS_TANK
+} PlayerClass_T;
+
+typedef enum{
+    BULLET_ZOMBIE,
+    BULLET_PLAYER
+}bulletType_T;
+
+typedef enum{
+    ZOMBIE_NORMAL,
+    ZOMBIE_SPITTER
+}NPCtype_T;
+
+typedef enum{
+    ITEM_MEDKIT,
+    ITEM_AMMO,
+    ITEM_WEAPON,
+    ITEM_ARMOR
+}ItemType_T;
+
+typedef enum {
+    OBJECT_NPC,
+    OBJECT_WALL,
+    OBJECT_CAR,
+    OBJECT_ITEM,
+    OBJECT_PLAYER,
+    OBJECT_BULLET
+
+}objectType_t;
+
+typedef enum {
+    AI_ZOMBIE,
+    AI_SUPERZOMBIE,
+    AI_SPITTER
+} AI_T;
+
 
 typedef struct  {
     char name[20];
     int playerId;
     TCPsocket socket;
     bool status; //för återanvändning
+    bool ready;
     pthread_t tid;
+    PlayerClass_T pClass;
 }Connections;
 
-typedef enum {
-    OBJECT_ZOMBIE_NORMAL,
-    OBJECT_WALL,
-    OBJECT_MEDKIT,
-    OBJECT_PLAYER
+typedef struct{
+    int health, ammo, speed, damage, armor, ammoTotal;
+    PlayerClass_T pClass;
+    bool alive;
+}PlayerInfo;
 
-}objectType_t;
+typedef struct{
+    ItemType_T type;
+    int amount;
+}ItemInfo;
+
+typedef struct{
+    int velocity;
+    int timetolive;
+    int damage;
+    double angle;
+    bulletType_T type;
+}BulletInfo;
+
+typedef struct{
+    AI_T ai;
+    int health;
+    int speed;
+    int damage;
+    int detectRange;
+    float atkCd;
+    int attackRange;
+    int atkTimer;
+    int bulletSpeed;
+    SDL_Rect* target;
+    bool* targetIsAlive;
+    int fireRate;
+    int fireCount;
+}AI;
 
 typedef struct{
     objectType_t type;
-    int x;
-    int y;
+    SDL_Rect rect;
     int obj_id;
+
+    //Transform
+    double rotation;
+    bool solid;
+
+    //AI
+    AI ai;
+
+    //Item
+    ItemInfo itemInfo;
+
+    //Projectiles
+    BulletInfo bulletInfo;
+
+    //Player
+    PlayerInfo playerInfo;
 
 }GameObject;
 
