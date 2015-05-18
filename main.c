@@ -25,7 +25,7 @@ exit
 #include "client_handler.h"
 #include "net_msgs.h"
 #include "pool_reader.h"
-#include "server_update.h"
+//#include "server_update.h"
 
 int nextId = 0;
 
@@ -33,6 +33,7 @@ int nextId = 0;
 int main(int argc, char **argv)
 {
     int deltaTime = SDL_GetTicks();
+
     bool lobbyReady = false;
     bool anyoneHere = false;
     //GameObject objects[100];
@@ -48,7 +49,9 @@ int main(int argc, char **argv)
     pthread_t listener;
     printf("Starting listener thread.\n");
     pthread_create(&listener,NULL, &client_handle, (void*)&level);
-
+    newObject=CreateZombie(0,0, level.nextId++);
+    AddObject(&level, newObject);
+    //SendNewObject(newObject.obj_id, newObject.x, newObject.y, OBJECT_ZOMBIE_NORMAL);
     int i;
     printf("Lobby starting...\n");
 
@@ -94,7 +97,7 @@ int main(int argc, char **argv)
     { //GAMELOOP
         readPool(&level);//Läser nätverksmeddelanden från klienter
 
-        Update(&level); //Uppdaterar alla objekt på servern
+        //Update(&level); //Uppdaterar alla objekt på servern
 
         deltaTime = SDL_GetTicks() - deltaTime;
         if (deltaTime < 17){
