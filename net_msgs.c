@@ -75,6 +75,7 @@ int AddToPool(char* msg) // Funktion fˆr att l‰gga till meddelanden i stacks 
 void SendObjectPos(int objId, int x, int y, int angle)
 {
     char msg[512];
+
     int index=1, i;
     msg[0]=2;
     Converter_Int32ToBytes(msg, &index, objId);
@@ -92,8 +93,9 @@ void SendObjectPos(int objId, int x, int y, int angle)
 
 void SendNewObject(int objId, int x, int y, objectType_t type)
 {
-    char msg[512];
+    unsigned char msg[512];
     int index=1, i;
+
     msg[0]=5;
     Converter_Int32ToBytes(msg, &index, objId);
     Converter_Int32ToBytes(msg, &index, x);
@@ -238,33 +240,20 @@ void SendRemoveObject(int objId)
 
 }
 
-void SendPlayerId(int PlayerId){
-    char msg[512];
+void SendPlayerId(int PlayerId, int clientID){
+    unsigned char msg[512];
     int index=1;
     msg[0]=7;
     printf("Player id = '%d'\n",PlayerId);
     Converter_Int32ToBytes(msg, &index, PlayerId);
     printf("debug1\n");
-
-    for(int i = 0; i < N_CLIENTS; i++)
-    {
-        if(client[i].status == true)
-        {
-            if(client[i].playerId == PlayerId)
-            {
-                SDLNet_TCP_Send(client[i].socket, msg, 512);
-                break;
-            }
-
-        }
-    }
-
+    SDLNet_TCP_Send(client[clientID].socket, msg, 512);
 
 }
 
 void SendLobbyPlayer(char* playerName, char pClass)
 {
-    char data[512];
+    unsigned char data[512];
     int index = 1;
     int length = strlen(playerName);
 
@@ -290,8 +279,10 @@ void SendLobbyPlayer(char* playerName, char pClass)
             }
         }
     }
+
 }
 
+<<<<<<< HEAD
 void RecvPlayerShoot(char data[], Scene* scene)
 {
     int index = 1;
@@ -314,6 +305,9 @@ void RecvPlayerShoot(char data[], Scene* scene)
 }
 
 void RecvPlayerPos(char data[], Scene* scene){
+=======
+void RecvPlayerPos(unsigned char data[], Scene* scene){
+>>>>>>> cdc0a4e72588188b2bde6fee37d810089f87c4db
     int index = 1;
     int playerId, x, y, angle;
 
@@ -335,7 +329,7 @@ void RecvPlayerPos(char data[], Scene* scene){
     }
 }
 
-void RecvPlayerReady(char data[])
+void RecvPlayerReady(unsigned char data[])
 {
     int index = 1;
     int playerId = Converter_BytesToInt32(data, &index);

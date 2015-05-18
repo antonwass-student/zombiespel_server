@@ -31,7 +31,7 @@ void* client_handle(void* objs){
     IPaddress ip, *remoteIP;
     int listening = 1, i=0;
     int sockets_available=1;
-    char msg[512];
+    unsigned char msg[512];
     Scene *level = (Scene*)objs;// = *(GameObject*) objs;
     GameObject player;
 
@@ -100,11 +100,14 @@ void* client_handle(void* objs){
                         printf("Connection id = %d\n",client[i].playerId);
 
                         printf("Player class = %d at position %d\n", msg[index], index);
-                        SendLobbyPlayer(client[i].name, msg[index]);
-                        SendPlayerId(client[i].playerId);
 
-                        AddObject(level, player, false);
-                        printf("Player is in lobby.\n");
+                        //SendLobbyPlayer(client[i].name, msg[index]);
+                        SendPlayerId(client[i].playerId, i);
+                        /*
+                        AddObject(level, player);
+                        SendSyncObjects(i, level);
+                        printf("Objects synced. player is ready\n");
+                        */
 
                         pthread_create(&client[i].tid, NULL, &client_process, &i);
                         break;//hittat en ledig plats
