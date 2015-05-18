@@ -52,11 +52,11 @@ void readPool(Scene *scene){
                 printf("Message with id 2 was received\n");
                 break;
             case 3: //player_move
-                //player_move(recvPool.queue[i], objects);
                 RecvPlayerPos(recvPool.queue[i], scene);
                 break;
-            case 4: //player_shoot
-                //player_shoot(i, scene);
+            case NET_PLAYER_SHOOT: //player_shoot
+                printf("Received shoot from player");
+                RecvPlayerShoot(recvPool.queue[i], scene);
                 break;
             case 8: //send player_name
                 printf("Message with ID 8 was received.\n");

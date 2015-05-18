@@ -21,8 +21,8 @@ int AddToPool(char* msg);
 void SendObjectPos(int objId, int x, int y, int angle);//MSG 2
 void SendNewObject(int objId, int x, int y, objectType_t type); //MSG 5
 void SendRemoveObject(int objId); //MSG 6
-void SyncObjects(int clientID);
-void SendPlayerId(int PlayerId, int i); //MSG 7
-void RecvPlayerPos(unsigned char data[], Scene* scene);
+void SendSyncObjects(Scene* scene);
+void SendPlayerId(int PlayerId); //MSG 7
+void RecvPlayerPos(char data[], Scene* scene);
 
 #endif /* defined(__SDL_net__net_msgs__) */

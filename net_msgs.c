@@ -74,7 +74,7 @@ int AddToPool(char* msg) // Funktion fˆr att l‰gga till meddelanden i stacks 
 
 void SendObjectPos(int objId, int x, int y, int angle)
 {
-     char msg[512];
+    char msg[512];
     int index=1, i;
     msg[0]=2;
     Converter_Int32ToBytes(msg, &index, objId);
@@ -84,7 +84,7 @@ void SendObjectPos(int objId, int x, int y, int angle)
 
     for(i=0;i<N_CLIENTS;i++)
     {
-        if(client[i].status == true)
+        if(client[i].status == true && client[i].playerId != objId)
             SDLNet_TCP_Send(client[i].socket, msg, 512);
     }
 
@@ -121,12 +121,86 @@ void SendGameStart()
             SDLNet_TCP_Send(client[j].socket, data, 512);
         }
     }
+}
 
+void SendBullet(GameObject bullet)
+{
+    char data[512];
+    int index = 1;
+    data[0] = NET_OBJECT_BULLET;
+
+    Converter_Int32ToBytes(data, &index, bullet.obj_id);
+    Converter_Int32ToBytes(data, &index, bullet.rect.x);
+    Converter_Int32ToBytes(data, &index, bullet.rect.y);
+    Converter_Int32ToBytes(data, &index, (int)bullet.bulletInfo.angle);
+    Converter_Int32ToBytes(data, &index, bullet.bulletInfo.damage);
+    Converter_Int32ToBytes(data, &index, bullet.bulletInfo.velocity);
+
+    data[index++] = bullet.bulletInfo.type;
+
+    printf("Sending bullet to clients with angle = '%d'\n", bullet.bulletInfo.angle);
+
+    for(int j = 0; j < N_CLIENTS; j++)
+    {
+        if(client[j].status)
+        {
+            printf("Bullet - sent\n");
+            SDLNet_TCP_Send(client[j].socket, data, 512);
+            printf("post bullet\n");
+        }
+    }
+}
+
+void SendPlayerStats()
+{
+    int x = 2750, y = 5350, damage, health, speed;
+
+
+    for(int j = 0; j < N_CLIENTS; j++)
+    {
+        if(client[j].status)
+        {
+            switch(client[j].pClass)
+            {
+                case CLASS_SCOUT:
+                    damage = 10;
+                    health = 50;
+                    speed = 8;
+                    break;
+                case CLASS_SOLDIER:
+                    damage = 25;
+                    health = 80;
+                    speed = 5;
+                    break;
+                case CLASS_TANK:
+                    damage = 20;
+                    health = 100;
+                    speed = 4;
+                    break;
+            }
+
+            char data[512];
+            int index = 1;
+
+            data[0] = NET_PLAYER_STATS;
+
+            Converter_Int32ToBytes(data, &index, x);
+            Converter_Int32ToBytes(data, &index, y);
+            Converter_Int32ToBytes(data, &index, damage);
+            Converter_Int32ToBytes(data, &index, health);
+            Converter_Int32ToBytes(data, &index, speed);
+
+            SDLNet_TCP_Send(client[j].socket, data, 512);
+            printf("Stats was sent to '%s'\n", client[j].name);
+
+            x+=200;
+        }
+    }
 }
 
 void SendSyncObjects(Scene* scene){
     int i;
-    printf("sending sync objects.\n");
+    printf("Sending SyncObjects.\n");
     for(i = 0; i < scene->objCount; i++)
     {
         char msg[512];
@@ -139,10 +213,11 @@ void SendSyncObjects(Scene* scene){
 
         for(int j = 0; j < N_CLIENTS; j++)
         {
-            if(client[j].status)
+            if(client[j].status && scene->objects[i].obj_id != client[j].playerId)
             {
                 SDLNet_TCP_Send(client[j].socket, msg, 512);
-                printf("object id %d was sent to '%d'\n",scene->objects[i].obj_id, client[j].name);
+                printf("object id %d was sent to id:'%d' name'%s'\n",scene->objects[i].obj_id, j,client[j].name);
+                printf("X = '%d' , y = '%d'\n", scene->objects[i].rect.x, scene->objects[i].rect.y);
             }
         }
     }
@@ -150,7 +225,7 @@ void SendSyncObjects(Scene* scene){
 
 void SendRemoveObject(int objId)
 {
-     char msg[512];
+    char msg[512];
     int index=1, i;
     msg[0]=6;
     Converter_Int32ToBytes(msg, &index, objId);
@@ -217,10 +292,31 @@ void SendLobbyPlayer(char* playerName, char pClass)
     }
 }
 
+void RecvPlayerShoot(char data[], Scene* scene)
+{
+    int index = 1;
+    int id, x, y, angle, damage, speed;
+    bulletType_T bType;
+
+    id = Converter_BytesToInt32(data, &index);
+    x = Converter_BytesToInt32(data, &index);
+    y = Converter_BytesToInt32(data, &index);
+    angle = Converter_BytesToInt32(data, &index);
+    damage = Converter_BytesToInt32(data, &index);
+    speed = Converter_BytesToInt32(data, &index);
+
+    printf("Received a bullet with angle = '%d'\n",angle);
+
+    GameObject bullet = CreateBullet(id, x, y, damage, angle, speed, BULLET_PLAYER);
+    AddObject(scene, bullet, false);
+    SendBullet(bullet);
+
+}
+
 void RecvPlayerPos(char data[], Scene* scene){
     int index = 1;
     int playerId, x, y, angle;
-    printf("received player pos\n");
+
 
     playerId = Converter_BytesToInt32(data, &index);
     x = Converter_BytesToInt32(data, &index);
@@ -233,7 +329,7 @@ void RecvPlayerPos(char data[], Scene* scene){
         {
             scene->objects[i].rect.x = x;
             scene->objects[i].rect.y = y;
-            printf("player pos x=%d, y=%d, angle=%d\n",x, y, angle);
+            SendObjectPos(playerId, x, y, angle);
             break;
         }
     }

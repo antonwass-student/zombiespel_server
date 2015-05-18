@@ -67,6 +67,7 @@ int main(int argc, char **argv)
                 else
                 {
                     lobbyReady = false;
+                    break;
                 }
 
             }
@@ -82,12 +83,15 @@ int main(int argc, char **argv)
     printf("Game starting...\n");
 
     SendGameStart();
+    SendPlayerStats();
 
 
     //LoadLevel(&level); //Ladda in banans objekt
-    newObject=CreateZombie(3000,600, level.nextId++);
-    AddObject(&level, newObject);
-    //LoadPlayers(&level); //Ladda in spelare i banan
+    newObject=CreateZombie(2750,4800, level.nextId++);
+    AddObject(&level, newObject, true);
+
+    SendSyncObjects(&level);
+
 
 
     while (1)

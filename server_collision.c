@@ -3,8 +3,7 @@
 
 int NewDamage(GameObject* NPC, GameObject* Player);
 
-bool MoveObject(GameObject* movingObject, Scene* scene, int speedX, int speedY, int objectIndex)
-{
+bool MoveObject(GameObject* movingObject, Scene* scene, int speedX, int speedY, int objectIndex){
     bool colUp = false, colDown = false, colLeft = false, colRight = false;
 
     movingObject->rect.x += speedX;
@@ -18,6 +17,7 @@ bool MoveObject(GameObject* movingObject, Scene* scene, int speedX, int speedY, 
             continue;
         if(scene->objects[i].type == OBJECT_NPC && movingObject->type == OBJECT_NPC)
             continue;
+
 
         if(movingObject->rect.x <= scene->objects[i].rect.x + scene->objects[i].rect.w &&
            movingObject->rect.x >= scene->objects[i].rect.x) // kollision vänster av objekt
@@ -68,6 +68,7 @@ bool MoveObject(GameObject* movingObject, Scene* scene, int speedX, int speedY, 
                 movingObject->rect.y -= speedY;
             }
         }
+
 
         ProximityCheck(movingObject, &scene->objects[i], objectIndex, i, scene);
 

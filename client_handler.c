@@ -93,7 +93,7 @@ void* client_handle(void* objs){
                         index+= nameLength;
 
                         printf("Player name = %s\n", client[i].name);
-                        player = CreatePlayer(0,0, level->nextId++);
+                        player = CreatePlayer(2750, 5350, level->nextId++);
 
                         printf("Player object id = %d\n", player.obj_id);
                         client[i].playerId = player.obj_id;//+1500;
@@ -102,11 +102,9 @@ void* client_handle(void* objs){
                         printf("Player class = %d at position %d\n", msg[index], index);
                         SendLobbyPlayer(client[i].name, msg[index]);
                         SendPlayerId(client[i].playerId);
-                        /*
-                        AddObject(level, player);
-                        SendSyncObjects(i, level);
-                        printf("Objects synced. player is ready\n");
-                        */
+
+                        AddObject(level, player, false);
+                        printf("Player is in lobby.\n");
 
                         pthread_create(&client[i].tid, NULL, &client_process, &i);
                         break;//hittat en ledig plats

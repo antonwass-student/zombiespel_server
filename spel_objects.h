@@ -12,10 +12,10 @@
 #include <stdio.h>
 #include "server_structs.h"
 
-int AddObject(Scene* scene, GameObject object);
+int AddObject(Scene* scene, GameObject object, bool net);
 int RemoveObject(Scene* scene, int id);
 GameObject CreateZombie(int x, int y, int id);
 GameObject CreatePlayer(int x, int y, int id);
-GameObject CreateBullet(int id, int x, int y, bulletType_T type, int damage, int direction, int velocity);
+GameObject CreateBullet(int id, int x, int y, int damage, int direction, int velocity, bulletType_T bType);
 
 #endif /* defined(__SDL_net__spel_objects__) */

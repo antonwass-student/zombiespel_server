@@ -35,7 +35,8 @@ typedef enum{
     NET_PLAYER_STATS,
     NET_LOBBY_PLAYER,
     NET_PLAYER_READY,
-    NET_GAME_START
+    NET_GAME_START,
+    NET_OBJECT_BULLET
 } NetMessages_T;
 
 

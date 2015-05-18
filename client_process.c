@@ -24,10 +24,9 @@ void* client_process(void* arg)
     while (!quit)
     {
         //SDL_Delay(10);
-        
+
         if (SDLNet_TCP_Recv(client[i].socket, buffer, 512) > 0)
         {
-            printf("Client %d says: %s\n", i, buffer);
             AddToPool(buffer);
             if(strcmp(buffer, "exit") == 0)	/* Terminate this connection */
             {
@@ -35,7 +34,7 @@ void* client_process(void* arg)
                 printf("Terminate connection\n");
             }
         }
-        
+
     }
     SDLNet_TCP_Close(client[i].socket);
     client[i].status = false;
