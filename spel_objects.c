@@ -6,10 +6,19 @@
 //  Copyright (c) 2015 project. All rights reserved.
 //
 
+#ifdef __APPLE__
+#include <SDL2/SDL.h>
+#include "SDL2_net/SDL_net.h"
+
+#elif __linux
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_net.h"
+#endif
+
 #include <stdio.h>
 #include <pthread.h>
 #include "server_structs.h"
-#include <SDL2/SDL_net.h>
+
 
 int AddObject(Scene* scene, GameObject object)
 {
@@ -69,6 +78,7 @@ GameObject CreatePlayer(int x, int y, int id)
     object.rect.x=x;
     object.rect.y=y;
     object.obj_id = id;
+
     object.type=OBJECT_PLAYER;
     return object;
 }
