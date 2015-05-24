@@ -69,7 +69,8 @@ typedef enum {
     OBJECT_CAR,
     OBJECT_ITEM,
     OBJECT_PLAYER,
-    OBJECT_BULLET
+    OBJECT_BULLET,
+    OBJECT_ZOMBIE_SPITTER
 
 }objectType_t;
 

@@ -11,14 +11,14 @@ bool MoveObject(GameObject* movingObject, Scene* scene, int speedX, int speedY, 
 
     for(int i = 0; i < scene->objCount; i++) // Kollar kollision mellan alla objekt i scene
     {
-        if(scene->objects[i].type == OBJECT_PLAYER && movingObject->type == OBJECT_PLAYER)
-            continue;
-        if(scene->objects[i].type == OBJECT_BULLET && movingObject->type == OBJECT_BULLET)
-            continue;
-        if(scene->objects[i].type == OBJECT_NPC && movingObject->type == OBJECT_NPC)
+        if(scene->objects[i].obj_id == movingObject->obj_id)
             continue;
 
 
+
+        //printf("Checking ColLeft\n");
+        //printf("MovingObject x=%d, w=%d\n", movingObject->rect.x, movingObject->rect.w);
+       // printf("OtherObject  x=%d, w=%d\n", scene->objects[i].rect.x, scene->objects[i].rect.w);
         if(movingObject->rect.x <= scene->objects[i].rect.x + scene->objects[i].rect.w &&
            movingObject->rect.x >= scene->objects[i].rect.x) // kollision vänster av objekt
         {
@@ -131,6 +131,7 @@ void ProximityCheck(GameObject* obj1, GameObject* obj2, int obj1_index,int obj2_
             }
         }
     }
+
     /*
     if(obj1->type == OBJECT_NPC&& obj2->type == OBJECT_EXPLOSION){
         if(obj1->type == OBJECT_NPC && distance < 100){
@@ -146,7 +147,7 @@ void ProximityCheck(GameObject* obj1, GameObject* obj2, int obj1_index,int obj2_
 void CollisionHandler(GameObject* collider1, GameObject* collider2, int c1_index, int c2_index, Scene* scene)
 {
     int newObject = -1;
-    //printf("CollisionHandler with object1:%s and object2:%s",collider1->name,collider2->name);
+    printf("CollisionHandler with object1:%d and object2:%d\n",collider1->obj_id,collider2->obj_id);
     if(collider1->type == OBJECT_BULLET && collider2->type == OBJECT_NPC) //Bullet med zombie
     {
 

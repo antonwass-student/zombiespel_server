@@ -42,7 +42,8 @@ int RemoveObject(Scene* scene, int id)
     {
         if(scene->objects[i].obj_id==id)
         {
-            printf("Object removed\n");
+            printf("Object removed with id %d\n", id);
+            SendRemoveObject(id);
             index=i;
             break;
         }
@@ -61,6 +62,7 @@ int RemoveObject(Scene* scene, int id)
     }
     scene->objCount--;
     SDL_UnlockMutex(scene->obj_mutex);
+
     return 0;
 }
 
@@ -69,8 +71,12 @@ GameObject CreateZombie(int x, int y, int id)
     GameObject object;
     object.rect.x=x;
     object.rect.y=y;
+    object.rect.w = 128;
+    object.rect.h = 128;
     object.obj_id=id;
     object.type=OBJECT_NPC;
+
+    object.ai.health = 100;
 
     object.ai.attackRange = 50;
     object.ai.detectRange = 300;
@@ -79,17 +85,44 @@ GameObject CreateZombie(int x, int y, int id)
     object.ai.atkCd = 30;
     object.ai.atkTimer = 30;
     object.ai.damage = 30;
+    object.ai.target = NULL;
     return object;
 }
+
+GameObject CreateZombieSpitter(int x, int y, int id)
+{
+    GameObject object;
+    object.rect.x=x;
+    object.rect.y=y;
+    object.rect.w = 128;
+    object.rect.h = 128;
+    object.obj_id=id;
+    object.type=OBJECT_ZOMBIE_SPITTER;
+
+    object.ai.health = 100;
+    object.ai.attackRange = 200;
+    object.ai.detectRange = 700;
+    object.ai.speed = 5;
+    object.ai.ai = AI_SPITTER;
+    object.ai.atkCd = 30;
+    object.ai.atkTimer = 30;
+    object.ai.damage = 30;
+    object.ai.target = NULL;
+    return object;
+}
+
 
 GameObject CreatePlayer(int x, int y, int id)
 {
     GameObject object;
     object.rect.x=x;
     object.rect.y=y;
+    object.rect.w = 128;
+    object.rect.h = 128;
     object.obj_id = id;
+    object.playerInfo.alive = true;
 
-    object.type=OBJECT_PLAYER;
+    object.type = OBJECT_PLAYER;
     return object;
 }
 
@@ -98,6 +131,8 @@ GameObject CreateBullet(int id, int x, int y, int damage, int direction, int vel
     GameObject object;
     object.rect.x = x;
     object.rect.y = y;
+    object.rect.w = 20;
+    object.rect.h = 20;
     object.obj_id = id;
     object.type = OBJECT_BULLET;
 

@@ -33,6 +33,7 @@ void connectionInit()
 {
     for(int i = 0; i < N_CLIENTS; i++)
     {
+        client[i].status = false;
         client[i].ready = false;
     }
 }
@@ -135,7 +136,6 @@ void SendBullet(GameObject bullet)
     Converter_Int32ToBytes(data, &index, bullet.rect.x);
     Converter_Int32ToBytes(data, &index, bullet.rect.y);
     Converter_Int32ToBytes(data, &index, (int)bullet.bulletInfo.angle);
-    Converter_Int32ToBytes(data, &index, bullet.bulletInfo.damage);
     Converter_Int32ToBytes(data, &index, bullet.bulletInfo.velocity);
 
     data[index++] = bullet.bulletInfo.type;
@@ -240,74 +240,82 @@ void SendRemoveObject(int objId)
 
 }
 
-void SendPlayerId(int PlayerId, int clientID){
+void SendPlayerId(int PlayerId){
     unsigned char msg[512];
     int index=1;
     msg[0]=7;
     printf("Player id = '%d'\n",PlayerId);
     Converter_Int32ToBytes(msg, &index, PlayerId);
     printf("debug1\n");
-    SDLNet_TCP_Send(client[clientID].socket, msg, 512);
+    for(int i=0;i<N_CLIENTS;i++)
+    {
+        if(client[i].status == true && client[i].playerId == PlayerId)
+            SDLNet_TCP_Send(client[i].socket, msg, 512);
+    }
+
 
 }
 
-void SendLobbyPlayer(char* playerName, char pClass)
+void SendLobbyPlayer(char* playerName, char pClass, int playerId)
 {
     unsigned char data[512];
     int index = 1;
     int length = strlen(playerName);
 
-    data[0] = 11;
+    data[0] = NET_LOBBY_PLAYER;
 
     Converter_Int32ToBytes(data, &index, length);
 
     for(int i = 0; i < length; i++)
     {
         data[index + i] = playerName[i];
+        printf("Packing down name at index %d\n", index + i);
     }
     index += length;
 
-    data[index] = pClass;
+    data[index++] = pClass;
+
+    printf("Sending player with name %s to clients\n", playerName);
 
     for(int i = 0; i < N_CLIENTS; i++)
     {
         if(client[i].status == true)
         {
-            if(strcmp(client[i].name, playerName))
+            printf("Comparing player ids...\n");
+            SDLNet_TCP_Send(client[i].socket, data, 512);
+            /*
+            if(client[i].playerId != playerId)
             {
                 SDLNet_TCP_Send(client[i].socket, data, 512);
-            }
+                printf("Sent player to %s\n", client[i].name);
+            }*/
         }
     }
 
 }
 
-<<<<<<< HEAD
 void RecvPlayerShoot(char data[], Scene* scene)
 {
     int index = 1;
-    int id, x, y, angle, damage, speed;
+    int shooterId, x, y, angle, damage, speed;
     bulletType_T bType;
 
-    id = Converter_BytesToInt32(data, &index);
+    shooterId = Converter_BytesToInt32(data, &index);
     x = Converter_BytesToInt32(data, &index);
     y = Converter_BytesToInt32(data, &index);
     angle = Converter_BytesToInt32(data, &index);
     damage = Converter_BytesToInt32(data, &index);
     speed = Converter_BytesToInt32(data, &index);
 
-    printf("Received a bullet with angle = '%d'\n",angle);
+    printf("Received a shoot with x = '%d' y = '%d' speed = '%d'\n",x, y, speed);
 
-    GameObject bullet = CreateBullet(id, x, y, damage, angle, speed, BULLET_PLAYER);
-    AddObject(scene, bullet, false);
+    GameObject bullet = CreateBullet(scene->nextId++, x, y, damage, angle, speed, BULLET_PLAYER);
+    AddObject(scene, bullet, false); //net är false eftersom att bullet är ett speciellt objekt.
     SendBullet(bullet);
 
 }
 
 void RecvPlayerPos(char data[], Scene* scene){
-=======
-void RecvPlayerPos(unsigned char data[], Scene* scene){
->>>>>>> cdc0a4e72588188b2bde6fee37d810089f87c4db
     int index = 1;
     int playerId, x, y, angle;
 

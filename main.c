@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     printf("Starting listener thread.\n");
     pthread_create(&listener,NULL, &client_handle, (void*)&level);
     newObject=CreateZombie(0,0, level.nextId++);
-    AddObject(&level, newObject);
+    AddObject(&level, newObject, false);
     //SendNewObject(newObject.obj_id, newObject.x, newObject.y, OBJECT_ZOMBIE_NORMAL);
     int i;
     printf("Lobby starting...\n");
@@ -91,17 +91,21 @@ int main(int argc, char **argv)
 
     //LoadLevel(&level); //Ladda in banans objekt
     newObject=CreateZombie(2750,4800, level.nextId++);
-    AddObject(&level, newObject, true);
+    AddObject(&level, newObject, false);
+
+    newObject=CreateZombie(2900,4800, level.nextId++);
+    AddObject(&level, newObject, false);
+
+    newObject=CreateZombie(3100,4800, level.nextId++);
+    AddObject(&level, newObject, false);
 
     SendSyncObjects(&level);
-
-
 
     while (1)
     { //GAMELOOP
         readPool(&level);//Läser nätverksmeddelanden från klienter
 
-        //Update(&level); //Uppdaterar alla objekt på servern
+        Update(&level); //Uppdaterar alla objekt på servern
 
         deltaTime = SDL_GetTicks() - deltaTime;
         if (deltaTime < 17){
