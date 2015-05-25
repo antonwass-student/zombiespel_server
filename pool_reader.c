@@ -55,7 +55,7 @@ void readPool(Scene *scene){
                 RecvPlayerPos(recvPool.queue[i], scene);
                 break;
             case NET_PLAYER_SHOOT: //player_shoot
-                printf("Received shoot from player");
+                printf("Received shoot from player\n");
                 RecvPlayerShoot(recvPool.queue[i], scene);
                 break;
             case 8: //send player_name

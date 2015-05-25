@@ -19,7 +19,7 @@ int Converter_BytesToInt32(unsigned char data[], int* index);
 int Converter_Int32ToBytes(unsigned char data[], int* size, int value);
 int AddToPool(char* msg);
 void SendObjectPos(int objId, int x, int y, int angle);//MSG 2
-void SendNewObject(int objId, int x, int y, objectType_t type); //MSG 5
+void SendNewObject(int objId, int x, int y, objectType_t type, char* name); //MSG 5
 void SendRemoveObject(int objId); //MSG 6
 void SendSyncObjects(Scene* scene);
 void SendPlayerId(int PlayerId); //MSG 7

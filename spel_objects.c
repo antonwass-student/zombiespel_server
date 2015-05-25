@@ -26,10 +26,23 @@ int AddObject(Scene* scene, GameObject object, bool net)
     scene->objects[scene->objCount] = object;
     scene->objCount++;
     SDL_UnlockMutex(scene->obj_mutex);
+    printf("debug1\n");
 
     //skicka till klienterna
     if(net)
-        SendNewObject(object.obj_id, object.rect.x, object.rect.y, object.type);
+    {
+        if(object.type == OBJECT_ITEM)
+        {
+            SendNewObject(object.obj_id, object.rect.x, object.rect.y, object.itemInfo.type);
+            printf("debug2\n");
+        }
+        else
+        {
+            SendNewObject(object.obj_id, object.rect.x, object.rect.y, object.type);
+        }
+
+    }
+
 
     return 0;
 }
@@ -66,6 +79,26 @@ int RemoveObject(Scene* scene, int id)
     return 0;
 }
 
+GameObject CreateMedkit(int x, int y, int id)
+{
+    GameObject object;
+    object.rect.x=x;
+    object.rect.y=y;
+    object.rect.w = 20;
+    object.rect.h = 20;
+    object.obj_id = id;
+    object.type = OBJECT_ITEM;
+    object.solid = false;
+    strcpy(object.name, "Medkit\0");
+
+    object.itemInfo.type = ITEM_MEDKIT;
+    object.itemInfo.amount = 40;
+
+    printf("Medkit created\n");
+
+    return object;
+}
+
 GameObject CreateZombie(int x, int y, int id)
 {
     GameObject object;
@@ -75,14 +108,16 @@ GameObject CreateZombie(int x, int y, int id)
     object.rect.h = 128;
     object.obj_id=id;
     object.type=OBJECT_NPC;
+    object.solid = false;
+    strcpy(object.name, "Zombie");
 
     object.ai.health = 100;
 
-    object.ai.attackRange = 50;
-    object.ai.detectRange = 300;
+    object.ai.attackRange = 100;
+    object.ai.detectRange = 400;
     object.ai.speed = 5;
     object.ai.ai = AI_ZOMBIE;
-    object.ai.atkCd = 30;
+    object.ai.atkCd = 120;
     object.ai.atkTimer = 30;
     object.ai.damage = 30;
     object.ai.target = NULL;
@@ -98,6 +133,7 @@ GameObject CreateZombieSpitter(int x, int y, int id)
     object.rect.h = 128;
     object.obj_id=id;
     object.type=OBJECT_ZOMBIE_SPITTER;
+    strcpy(object.name, "ZombieSpitter");
 
     object.ai.health = 100;
     object.ai.attackRange = 200;
@@ -112,7 +148,7 @@ GameObject CreateZombieSpitter(int x, int y, int id)
 }
 
 
-GameObject CreatePlayer(int x, int y, int id)
+GameObject CreatePlayer(int x, int y, int id, char* name)
 {
     GameObject object;
     object.rect.x=x;
@@ -120,7 +156,10 @@ GameObject CreatePlayer(int x, int y, int id)
     object.rect.w = 128;
     object.rect.h = 128;
     object.obj_id = id;
+
+    strcpy(object.name,name);
     object.playerInfo.alive = true;
+    object.playerInfo.health = 100;
 
     object.type = OBJECT_PLAYER;
     return object;
@@ -141,6 +180,8 @@ GameObject CreateBullet(int id, int x, int y, int damage, int direction, int vel
     object.bulletInfo.velocity = velocity;
     object.bulletInfo.type = bType;
     object.bulletInfo.timetolive = 120;
+
+    printf("new bullet x = %d, y = %d\n", x, y);
 
 
     return object;

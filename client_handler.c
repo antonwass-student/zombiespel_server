@@ -105,7 +105,7 @@ void* client_handle(void* objs){
                         index+= nameLength;
 
                         printf("Player name = %s\n", client[i].name);
-                        player = CreatePlayer(2750, 5350, level->nextId++);
+                        player = CreatePlayer(2750, 5350, level->nextId++, client[i].name);
 
                         printf("Player object id = %d\n", player.obj_id);
                         client[i].playerId = player.obj_id;//+1500;

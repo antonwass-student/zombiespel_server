@@ -36,7 +36,8 @@ typedef enum{
     NET_LOBBY_PLAYER,
     NET_PLAYER_READY,
     NET_GAME_START,
-    NET_OBJECT_BULLET
+    NET_OBJECT_BULLET,
+    NET_PLAYER_HEALTH
 } NetMessages_T;
 
 
@@ -57,9 +58,10 @@ typedef enum{
 }NPCtype_T;
 
 typedef enum{
-    ITEM_MEDKIT,
+    ITEM_MEDKIT = 7,
     ITEM_AMMO,
-    ITEM_WEAPON,
+    ITEM_WEAPON_1,
+    ITEM_WEAPON_2,
     ITEM_ARMOR
 }ItemType_T;
 
@@ -130,6 +132,7 @@ typedef struct{
     objectType_t type;
     SDL_Rect rect;
     int obj_id;
+    char name[30];
 
     //Transform
     double rotation;

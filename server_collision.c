@@ -1,5 +1,6 @@
 #include "server_collision.h"
 #include "server_structs.h"
+#include "spel_objects.h"
 
 int NewDamage(GameObject* NPC, GameObject* Player);
 
@@ -94,7 +95,7 @@ void ProximityCheck(GameObject* obj1, GameObject* obj2, int obj1_index,int obj2_
             obj1->playerInfo.ammoTotal += obj2->itemInfo.amount;
             RemoveObject(scene, obj2->obj_id);
         }
-        else if(obj2->itemInfo.type == ITEM_WEAPON && distance < 64) {
+        else if(obj2->itemInfo.type == ITEM_WEAPON_1 && distance < 64) {
             printf("collided with gun\n");
             obj1->playerInfo.damage += obj2->itemInfo.amount;
             RemoveObject(scene, obj2->obj_id);
@@ -111,6 +112,7 @@ void ProximityCheck(GameObject* obj1, GameObject* obj2, int obj1_index,int obj2_
         }
 
     }
+    /*
     if(obj1->type == OBJECT_PLAYER && obj2->type == OBJECT_NPC){
         if(obj1->type == OBJECT_PLAYER && distance < 85){
             if (obj2->ai.atkTimer == 0)
@@ -130,7 +132,9 @@ void ProximityCheck(GameObject* obj1, GameObject* obj2, int obj1_index,int obj2_
                 printf("Player health is now: %d\n", obj1->playerInfo.health);
             }
         }
-    }
+    }*/
+
+
 
     /*
     if(obj1->type == OBJECT_NPC&& obj2->type == OBJECT_EXPLOSION){
@@ -147,7 +151,7 @@ void ProximityCheck(GameObject* obj1, GameObject* obj2, int obj1_index,int obj2_
 void CollisionHandler(GameObject* collider1, GameObject* collider2, int c1_index, int c2_index, Scene* scene)
 {
     int newObject = -1;
-    printf("CollisionHandler with object1:%d and object2:%d\n",collider1->obj_id,collider2->obj_id);
+    //printf("CollisionHandler with object1:%d and object2:%d\n",collider1->obj_id,collider2->obj_id);
     if(collider1->type == OBJECT_BULLET && collider2->type == OBJECT_NPC) //Bullet med zombie
     {
 
@@ -158,7 +162,12 @@ void CollisionHandler(GameObject* collider1, GameObject* collider2, int c1_index
 
             if(collider2->ai.health <= 0)
             {
+                GameObject obj;
+                obj = CreateMedkit(collider2->rect.x, collider2->rect.y, scene->nextId++);
+                AddObject(scene, obj, true);
+                printf("Object added\n");
                 RemoveObject(scene, collider2->obj_id);
+
                 //  TODO:::Skapa någon slags drop-funktion.
                 //createObject(scene, OBJECT_ITEM, "MedKit", collider2->rect.x, collider2->rect.y, 50, 50, TXT_MEDKIT, false); //Lägg till create medkit
             }

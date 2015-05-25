@@ -51,17 +51,25 @@ void Zombie_UseBrain(Scene* scene, GameObject* zombie, int index)
 
 int Zombie_Attack(GameObject* zombie, Scene* scene)
 {
+    //printf("zombie attacked\n");
+    zombie->ai.atkTimer--;
     for(int i = 0; i < scene->objCount; i++)
     {
         if(scene->objects[i].type == OBJECT_PLAYER)
         {
             int distance = GetDistance(zombie->rect, scene->objects[i].rect);
-            if(distance < zombie->ai.attackRange)
+
+            if(distance < zombie->ai.attackRange && zombie->ai.atkTimer <= 0)
             {
                 scene->objects[i].playerInfo.health -= zombie->ai.damage;
+                zombie->ai.atkTimer = zombie->ai.atkCd;
+                printf("Player was damaged by Zombie.\n");
+                printf("New health is: %d\n", scene->objects[i].playerInfo.health);
+                SendPlayerHealth(scene->objects[i].obj_id, scene->objects[i].playerInfo.health);
                 // TODO:
                 // SEND A MESSAGE TO CLIENT WHO TOOK DMG
             }
+            break;
         }
     }
 }

@@ -21,7 +21,6 @@ int Update(Scene* scene)
             y -= sin((scene->objects[i].bulletInfo.angle + 90) * M_PI / 180.0f) * scene->objects[i].bulletInfo.velocity;
             x -= cos((scene->objects[i].bulletInfo.angle + 90) * M_PI / 180.0f) * scene->objects[i].bulletInfo.velocity;
             MoveObject(&scene->objects[i], scene, x, y, i);
-            printf("new bullet x = %d, y = %d\n", scene->objects[i].rect.x, scene->objects[i].rect.y);
         }
         else if(scene->objects[i].type == OBJECT_NPC) //NPC update
         {

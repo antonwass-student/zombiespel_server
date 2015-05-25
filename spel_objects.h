@@ -16,7 +16,8 @@ int AddObject(Scene* scene, GameObject object, bool net);
 int RemoveObject(Scene* scene, int id);
 GameObject CreateZombieSpitter(int x, int y, int id);
 GameObject CreateZombie(int x, int y, int id);
-GameObject CreatePlayer(int x, int y, int id);
+GameObject CreatePlayer(int x, int y, int id, char* name);
 GameObject CreateBullet(int id, int x, int y, int damage, int direction, int velocity, bulletType_T bType);
+GameObject CreateMedkit(int x, int y, int id);
 
 #endif /* defined(__SDL_net__spel_objects__) */
