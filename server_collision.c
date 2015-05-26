@@ -15,8 +15,6 @@ bool MoveObject(GameObject* movingObject, Scene* scene, int speedX, int speedY, 
         if(scene->objects[i].obj_id == movingObject->obj_id)
             continue;
 
-
-
         //printf("Checking ColLeft\n");
         //printf("MovingObject x=%d, w=%d\n", movingObject->rect.x, movingObject->rect.w);
        // printf("OtherObject  x=%d, w=%d\n", scene->objects[i].rect.x, scene->objects[i].rect.w);
@@ -90,9 +88,9 @@ void ProximityCheck(GameObject* obj1, GameObject* obj2, int obj1_index,int obj2_
     if(obj1->type == OBJECT_PLAYER && obj2->type == OBJECT_ITEM) //player med item
     {
         if(obj2->itemInfo.type == ITEM_MEDKIT && distance < 64) {
-            printf("collided with medkit\n");
+            printf("Player picked up medkit\n");
             obj1->playerInfo.health += obj2->itemInfo.amount;
-            obj1->playerInfo.ammoTotal += obj2->itemInfo.amount;
+            SendPlayerHealth(obj1->obj_id, obj1->playerInfo.health);
             RemoveObject(scene, obj2->obj_id);
         }
         else if(obj2->itemInfo.type == ITEM_WEAPON_1 && distance < 64) {
@@ -152,44 +150,59 @@ void CollisionHandler(GameObject* collider1, GameObject* collider2, int c1_index
 {
     int newObject = -1;
     //printf("CollisionHandler with object1:%d and object2:%d\n",collider1->obj_id,collider2->obj_id);
-    if(collider1->type == OBJECT_BULLET && collider2->type == OBJECT_NPC) //Bullet med zombie
+    if(collider1->type == OBJECT_BULLET)
     {
-
-        if(collider1->bulletInfo.type == BULLET_PLAYER)
+        if(collider1->bulletInfo.type == BULLET_PLAYER && (collider2->type == OBJECT_NPC || collider2->type == OBJECT_ZOMBIE_SPITTER))//Bullet med zombie
         {
-            printf("Bullet collided with NPC\n");
+            printf("Bullet(%d) hit a zombie\n", collider1->obj_id);
+            //printf("Bullet collided with NPC\n");
             collider2->ai.health -= collider1->bulletInfo.damage;
 
             if(collider2->ai.health <= 0)
             {
                 GameObject obj;
+                printf("Bullet(%d) being removed.\n", collider1->obj_id);
+                RemoveObject(scene, collider1->obj_id);
                 obj = CreateMedkit(collider2->rect.x, collider2->rect.y, scene->nextId++);
+                printf("Zombie(%d) dropped a medkit(%d)\n",collider2->obj_id, obj.obj_id);
                 AddObject(scene, obj, true);
-                printf("Object added\n");
                 RemoveObject(scene, collider2->obj_id);
+
+                return;
+
 
                 //  TODO:::Skapa någon slags drop-funktion.
                 //createObject(scene, OBJECT_ITEM, "MedKit", collider2->rect.x, collider2->rect.y, 50, 50, TXT_MEDKIT, false); //Lägg till create medkit
             }
-
+            printf("Bullet(%d) being removed.\n", collider1->obj_id);
             RemoveObject(scene, collider1->obj_id);
         }
-        else if (collider1->bulletInfo.type == BULLET_ZOMBIE)
+        else if(collider1->bulletInfo.type == BULLET_ZOMBIE && collider2->type == OBJECT_PLAYER)
+        {
+                //TODO: Skada spelare
+                printf("Zombie bullet hit player\n");
+                RemoveObject(scene, collider1->obj_id);
+        }
+
+    }
+    else if(collider1->type == OBJECT_BULLET &&  collider2->type == OBJECT_PLAYER)
+    {/*
+        if (collider1->bulletInfo.type == BULLET_ZOMBIE)
         {
             collider2->playerInfo.health -= NewDamage(collider1,collider2);
-                if(collider2->playerInfo.health <= 0)
-                {
+            if(collider2->playerInfo.health <= 0)
+            {
 
-                    // TODO:: Skapa en respawn funktion. (game over funktion)
-                    printf("Player died!\n");
-                    collider2->rect.x = 3000;
-                    collider2->rect.y = 5200;
-                    collider2->playerInfo.health = 100;
-                    collider2->ai.target = NULL;
-                }
+                // TODO:: Skapa en respawn funktion. (game over funktion)
+                printf("Player died!\n");
+                collider2->rect.x = 3000;
+                collider2->rect.y = 5200;
+                collider2->playerInfo.health = 100;
+                collider2->ai.target = NULL;
+            }
             RemoveObject(scene, collider1->obj_id);
 
-        }
+        }*/
 
     }
 

@@ -22,9 +22,13 @@ int Update(Scene* scene)
             x -= cos((scene->objects[i].bulletInfo.angle + 90) * M_PI / 180.0f) * scene->objects[i].bulletInfo.velocity;
             MoveObject(&scene->objects[i], scene, x, y, i);
         }
-        else if(scene->objects[i].type == OBJECT_NPC) //NPC update
+        else if(scene->objects[i].type == OBJECT_NPC || scene->objects[i].type == OBJECT_ZOMBIE_SPITTER ) //NPC update
         {
             Zombie_UseBrain(scene, &scene->objects[i],i);
+        }
+        else if(scene->objects[i].type == OBJECT_PLAYER)
+        {
+            MoveObject(&scene->objects[i], scene, 0, 0, i);
         }
     }
 }

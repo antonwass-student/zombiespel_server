@@ -24,8 +24,8 @@ void Zombie_UseBrain(Scene* scene, GameObject* zombie, int index)
     if(zombie->ai.target == NULL)
             return;
 
-    dx = zombie->rect.x - zombie->ai.target->x;
-    dy = zombie->rect.y - zombie->ai.target->y;
+    dx = zombie->rect.x - (zombie->ai.target->x + (zombie->ai.target->w /2));
+    dy = zombie->rect.y - (zombie->ai.target->y + (zombie->ai.target->h /2));
     zombie->rotation = 270 + (atan2(dy,dx)*180/M_PI);
 
     dx = 0;
@@ -37,16 +37,17 @@ void Zombie_UseBrain(Scene* scene, GameObject* zombie, int index)
     if(GetDistance(*zombie->ai.target,zombie->rect) > zombie->ai.attackRange)
     {
         MoveObject(zombie, scene, dx,dy, index);
-        SendObjectPos(zombie->obj_id, zombie->rect.x, zombie->rect.y, (int)zombie->rotation);
+
         //printf("Sent object pos to server\n");
     }
-    if(GetDistance(*zombie->ai.target,zombie->rect) < zombie->ai.attackRange)
+    else if(GetDistance(*zombie->ai.target,zombie->rect) < zombie->ai.attackRange)
     {
         if(zombie->ai.ai == AI_SPITTER)
             Zombie_Shoot(zombie, scene);
         else if(zombie->ai.ai == AI_ZOMBIE)
             Zombie_Attack(zombie, scene);
     }
+    SendObjectPos(zombie->obj_id, zombie->rect.x, zombie->rect.y, (int)zombie->rotation);
 }
 
 int Zombie_Attack(GameObject* zombie, Scene* scene)
@@ -81,13 +82,15 @@ int Zombie_Shoot(GameObject* zombie, Scene* scene)
     }
 
     if(zombie->ai.fireCount == 0){
+        printf("Zombie fired.\n");
 
         GameObject obj;
         obj = CreateBullet(scene->nextId++, zombie->rect.x, zombie->rect.y, zombie->ai.damage, zombie->rotation, zombie->ai.bulletSpeed, BULLET_ZOMBIE);
-        AddObject(scene, obj, true);
+        AddObject(scene, obj, false);
+        SendBullet(obj);
         //newObject = createObject(scene, OBJECT_ZBULLET, "Spit", zombie->rect.x + (zombie->rect.w/2),zombie->rect.y + (zombie->rect.h/2), 20, 20, TXT_ZBULLET, false);
         //SetBulletStats(&scene->objects[newObject], zombie->ai.bulletSpeed, zombie->rotation, zombie->ai.damage);
-        //zombie->ai.fireCount = zombie->ai.fireRate;
+        zombie->ai.fireCount = zombie->ai.fireRate;
     }
 
     return EXIT_SUCCESS;

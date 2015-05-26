@@ -23,7 +23,7 @@
 #include "spel_objects.h"
 #include "net_msgs.h"
 
-#define N_CLIENTS 2
+#define N_CLIENTS 4
 
 
 void* client_handle(void* objs){
@@ -72,7 +72,7 @@ void* client_handle(void* objs){
 
             if (sockets_available)
             {
-                unsigned char msg[512] = {0};
+                unsigned char msg[128] = {0};
                 for(i=0; i<N_CLIENTS;i++){
                     if(client[i].status == false){
                         printf("Client accepted at index %d\n", i);
@@ -81,13 +81,13 @@ void* client_handle(void* objs){
 
                         //Väntar på msg 8.
                         while (msg[0]!= NET_PLAYER_NAME) {
-                            SDLNet_TCP_Recv(client[i].socket, msg, 512);//int nameLenght, str name
+                            SDLNet_TCP_Recv(client[i].socket, msg, 128);//int nameLenght, str name
                         }
 
                         int index = 1;
                         int nameLength = Converter_BytesToInt32(msg, &index);
 
-                        printf("Length = '%d'\n", nameLength);
+                        //printf("Length = '%d'\n", nameLength);
                         for (int j = 0; j<nameLength; j++) {
                             client[i].name[j] = (char) msg[j+index];
                         }
@@ -96,7 +96,8 @@ void* client_handle(void* objs){
                         {
                             if(!strcmp(client[j].name, client[i].name) && i != j)
                             {
-                                client[i].name[nameLength] = '1';
+                                //client[i].name[nameLength];
+                                sprintf(client[i].name, "%s%d",client[i].name,i);
                                 break;
                             }
 
@@ -104,14 +105,15 @@ void* client_handle(void* objs){
 
                         index+= nameLength;
 
-                        printf("Player name = %s\n", client[i].name);
+                        printf("__________________\n");
+                        printf("Player '%s' connected.\n", client[i].name);
                         player = CreatePlayer(2750, 5350, level->nextId++, client[i].name);
 
                         printf("Player object id = %d\n", player.obj_id);
                         client[i].playerId = player.obj_id;//+1500;
-                        printf("Connection id = %d\n",client[i].playerId);
 
-                        printf("Player class = %d at position %d\n", msg[index], index);
+                        printf("Player class = %d\n", msg[index]);
+                        printf("__________________\n");
 
 
                         SendPlayerId(client[i].playerId);

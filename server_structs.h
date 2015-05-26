@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <pthread.h>
-#define N_CLIENTS 2
+#define N_CLIENTS 4
 #define M_PI 3.14
 
 typedef enum{
@@ -161,7 +161,7 @@ typedef struct{
 } Scene;
 
 typedef struct{
-    char queue[128][512]; //Kö från klienterna till main
+    char queue[128][128]; //Kö från klienterna till main
     int size;
 
 }msg_stack;

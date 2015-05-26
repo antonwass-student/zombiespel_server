@@ -22,9 +22,9 @@
 
 void chat_msg(int n){
     //string msg, string sender (ändra till playerId och sätta först??)
-    char msg[512];
+    char msg[128];
     int i;
-    for (i=1; i<512; i++) {
+    for (i=1; i<128; i++) {
         if (recvPool.queue[n][i]== '\n' || recvPool.queue[n][i]== '\0' ) {
             break;
         }
@@ -40,8 +40,11 @@ void player_shoot(int n, Scene* scene){
     int angle = recvPool.queue[n][2];
 }
 
-void readPool(Scene *scene){
-    int i;
+int readPool(Scene *scene){
+    int i, size;
+    if(recvPool.size > 100)
+        printf("****Warning****\nHigh NetworkLoad: %d/128\n********", recvPool.size);
+
     for(i=0;i<recvPool.size;i++){
         switch (recvPool.queue[i][0]) {
             case 1: //chatt
@@ -55,7 +58,7 @@ void readPool(Scene *scene){
                 RecvPlayerPos(recvPool.queue[i], scene);
                 break;
             case NET_PLAYER_SHOOT: //player_shoot
-                printf("Received shoot from player\n");
+                //printf("Received shoot from player\n");
                 RecvPlayerShoot(recvPool.queue[i], scene);
                 break;
             case 8: //send player_name
@@ -68,6 +71,8 @@ void readPool(Scene *scene){
                 break;
         }
     }
+    size = recvPool.size;
     recvPool.size = 0;
+    return size;
 
 }

@@ -26,19 +26,18 @@ int AddObject(Scene* scene, GameObject object, bool net)
     scene->objects[scene->objCount] = object;
     scene->objCount++;
     SDL_UnlockMutex(scene->obj_mutex);
-    printf("debug1\n");
 
     //skicka till klienterna
     if(net)
     {
         if(object.type == OBJECT_ITEM)
         {
-            SendNewObject(object.obj_id, object.rect.x, object.rect.y, object.itemInfo.type);
-            printf("debug2\n");
+            SendNewObject(object.obj_id, object.rect.x, object.rect.y, object.itemInfo.type, object.name);
+            //printf("debug2\n");
         }
         else
         {
-            SendNewObject(object.obj_id, object.rect.x, object.rect.y, object.type);
+            SendNewObject(object.obj_id, object.rect.x, object.rect.y, object.type, object.name);
         }
 
     }
@@ -112,7 +111,6 @@ GameObject CreateZombie(int x, int y, int id)
     strcpy(object.name, "Zombie");
 
     object.ai.health = 100;
-
     object.ai.attackRange = 100;
     object.ai.detectRange = 400;
     object.ai.speed = 5;
@@ -133,17 +131,21 @@ GameObject CreateZombieSpitter(int x, int y, int id)
     object.rect.h = 128;
     object.obj_id=id;
     object.type=OBJECT_ZOMBIE_SPITTER;
+    object.solid = false;
     strcpy(object.name, "ZombieSpitter");
 
     object.ai.health = 100;
-    object.ai.attackRange = 200;
-    object.ai.detectRange = 700;
+    object.ai.attackRange = 300;
+    object.ai.detectRange = 400;
     object.ai.speed = 5;
     object.ai.ai = AI_SPITTER;
     object.ai.atkCd = 30;
     object.ai.atkTimer = 30;
     object.ai.damage = 30;
     object.ai.target = NULL;
+
+    object.ai.fireRate = 60;
+    object.ai.fireCount = 60;
     return object;
 }
 
@@ -181,7 +183,7 @@ GameObject CreateBullet(int id, int x, int y, int damage, int direction, int vel
     object.bulletInfo.type = bType;
     object.bulletInfo.timetolive = 120;
 
-    printf("new bullet x = %d, y = %d\n", x, y);
+    //printf("new bullet x = %d, y = %d\n", x, y);
 
 
     return object;

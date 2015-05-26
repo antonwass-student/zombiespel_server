@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     AddObject(&level, newObject, false);
     //SendNewObject(newObject.obj_id, newObject.x, newObject.y, OBJECT_ZOMBIE_NORMAL);
     int i;
-    printf("Lobby starting...\n");
+    printf("Lobby is open.\nWaiting for connection\n_______\n");
 
     while(!lobbyReady) //Lobby loop
     {
@@ -82,35 +82,41 @@ int main(int argc, char **argv)
         }
         deltaTime=SDL_GetTicks();
     }
-    printf("Everyone is ready:\n");
-    printf("Game starting...\n");
+    printf("Everyone is ready!\n");
+    printf("Spawning objects...\n");
 
     SendGameStart();
     SendPlayerStats();
 
+    SendSyncObjects(&level);
+
 
     //LoadLevel(&level); //Ladda in banans objekt
-    newObject=CreateZombie(2750,4800, level.nextId++);
-    AddObject(&level, newObject, false);
+    newObject=CreateZombieSpitter(2750,4800, level.nextId++);
+    AddObject(&level, newObject, true);
 
-    newObject=CreateZombie(2900,4800, level.nextId++);
-    AddObject(&level, newObject, false);
+    newObject=CreateZombieSpitter(2900,4800, level.nextId++);
+    AddObject(&level, newObject, true);
 
-    newObject=CreateZombie(3100,4800, level.nextId++);
-    AddObject(&level, newObject, false);
+    newObject=CreateZombieSpitter(3100,4800, level.nextId++);
+    AddObject(&level, newObject, true);
 
-    SendSyncObjects(&level);
+
+
+    printf("_______________\n***Game started****\n");
 
     while (1)
     { //GAMELOOP
-        readPool(&level);//Läser nätverksmeddelanden från klienter
+        int netLoad;
+        netLoad = readPool(&level);//Läser nätverksmeddelanden från klienter
 
         Update(&level); //Uppdaterar alla objekt på servern
 
         deltaTime = SDL_GetTicks() - deltaTime;
         if (deltaTime < 17){
             SDL_Delay(17-deltaTime);
-            //printf("%d\n",17-deltaTime);
+            if(17-deltaTime < 5)
+                printf("***Warning***\n high server load = %d\n**********\n",17-deltaTime);
         }
         deltaTime=SDL_GetTicks();
     }
