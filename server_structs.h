@@ -37,14 +37,21 @@ typedef enum{
     NET_PLAYER_READY,
     NET_GAME_START,
     NET_OBJECT_BULLET,
-    NET_PLAYER_HEALTH
+    NET_PLAYER_HEALTH,
+    NET_PLAYER_CLASS,
+    NET_PLAYER_CLASS_REC,
+    NET_PLAYER_CLASS_FINAL,
+    NET_PLAYER_WEAPON,
+    NET_PLAYER_AMMO,
+    NET_PLAYER_ARMOR
 } NetMessages_T;
 
 
 typedef enum {
     CLASS_SOLDIER,
     CLASS_SCOUT,
-    CLASS_TANK
+    CLASS_TANK,
+    CLASS_ENGINEER
 } PlayerClass_T;
 
 typedef enum{
@@ -62,6 +69,7 @@ typedef enum{
     ITEM_AMMO,
     ITEM_WEAPON_1,
     ITEM_WEAPON_2,
+    ITEM_WEAPON_3,
     ITEM_ARMOR
 }ItemType_T;
 

@@ -86,19 +86,38 @@ int main(int argc, char **argv)
     printf("Spawning objects...\n");
 
     SendGameStart();
-    SendPlayerStats();
+    SendPlayerStats(&level);
 
     SendSyncObjects(&level);
+    SendClassesFinal();
 
 
     //LoadLevel(&level); //Ladda in banans objekt
-    newObject=CreateZombieSpitter(2750,4800, level.nextId++);
+    //newObject=CreateZombieSpitter(2750,4800, level.nextId++);
+    //AddObject(&level, newObject, true);
+
+    //newObject=CreateZombieSpitter(2900,4800, level.nextId++);
+    //AddObject(&level, newObject, true);
+
+    newObject=CreateZombieSpitter(3100,4000, level.nextId++);
     AddObject(&level, newObject, true);
 
-    newObject=CreateZombieSpitter(2900,4800, level.nextId++);
+    newObject = CreateMedkit(3100,4800, level.nextId++);
     AddObject(&level, newObject, true);
 
-    newObject=CreateZombieSpitter(3100,4800, level.nextId++);
+    newObject = CreateAmmo(3100,4800, level.nextId++);
+    AddObject(&level, newObject, true);
+
+    newObject = CreateArmor(3000,4800, level.nextId++);
+    AddObject(&level, newObject, true);
+
+    newObject = CreateShotgun(3200,4800, level.nextId++);
+    AddObject(&level, newObject, true);
+
+    newObject = CreateRevolver(3300,4800, level.nextId++);
+    AddObject(&level, newObject, true);
+
+    newObject = CreateMachineGun(3400,4800, level.nextId++);
     AddObject(&level, newObject, true);
 
 

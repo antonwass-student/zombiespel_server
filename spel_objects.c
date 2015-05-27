@@ -54,7 +54,7 @@ int RemoveObject(Scene* scene, int id)
     {
         if(scene->objects[i].obj_id==id)
         {
-            printf("Object removed with id %d\n", id);
+            //printf("Object removed with id %d\n", id);
             SendRemoveObject(id);
             index=i;
             break;
@@ -76,6 +76,106 @@ int RemoveObject(Scene* scene, int id)
     SDL_UnlockMutex(scene->obj_mutex);
 
     return 0;
+}
+
+GameObject CreateMachineGun(int x, int y, int id)
+{
+    GameObject object;
+    object.rect.x=x;
+    object.rect.y=y;
+    object.rect.w = 20;
+    object.rect.h = 20;
+    object.obj_id = id;
+    object.type = OBJECT_ITEM;
+    object.solid = false;
+    strcpy(object.name, "Machine gun\0");
+
+    object.itemInfo.type = ITEM_WEAPON_1;
+    object.itemInfo.amount = 1;
+
+    printf("Machine gun created\n");
+
+    return object;
+}
+
+GameObject CreateShotgun(int x, int y, int id)
+{
+    GameObject object;
+    object.rect.x=x;
+    object.rect.y=y;
+    object.rect.w = 20;
+    object.rect.h = 20;
+    object.obj_id = id;
+    object.type = OBJECT_ITEM;
+    object.solid = false;
+    strcpy(object.name, "Shotgun\0");
+
+    object.itemInfo.type = ITEM_WEAPON_2;
+    object.itemInfo.amount = 1;
+
+    printf("Shotgun created\n");
+
+    return object;
+}
+
+GameObject CreateRevolver(int x, int y, int id)
+{
+    GameObject object;
+    object.rect.x=x;
+    object.rect.y=y;
+    object.rect.w = 20;
+    object.rect.h = 20;
+    object.obj_id = id;
+    object.type = OBJECT_ITEM;
+    object.solid = false;
+    strcpy(object.name, "Revolver\0");
+
+    object.itemInfo.type = ITEM_WEAPON_3;
+    object.itemInfo.amount = 1;
+
+    printf("Revolver created\n");
+
+    return object;
+}
+
+GameObject CreateArmor(int x, int y, int id)
+{
+    GameObject object;
+    object.rect.x=x;
+    object.rect.y=y;
+    object.rect.w = 20;
+    object.rect.h = 20;
+    object.obj_id = id;
+    object.type = OBJECT_ITEM;
+    object.solid = false;
+    strcpy(object.name, "Armor\0");
+
+    object.itemInfo.type = ITEM_ARMOR;
+    object.itemInfo.amount = 20;
+
+    printf("Armor created\n");
+
+    return object;
+}
+
+GameObject CreateAmmo(int x, int y, int id)
+{
+    GameObject object;
+    object.rect.x=x;
+    object.rect.y=y;
+    object.rect.w = 20;
+    object.rect.h = 20;
+    object.obj_id = id;
+    object.type = OBJECT_ITEM;
+    object.solid = false;
+    strcpy(object.name, "Ammo\0");
+
+    object.itemInfo.type = ITEM_AMMO;
+    object.itemInfo.amount = 20;
+
+    printf("Ammo created\n");
+
+    return object;
 }
 
 GameObject CreateMedkit(int x, int y, int id)
@@ -162,6 +262,7 @@ GameObject CreatePlayer(int x, int y, int id, char* name)
     strcpy(object.name,name);
     object.playerInfo.alive = true;
     object.playerInfo.health = 100;
+    object.playerInfo.ammoTotal = 0;
 
     object.type = OBJECT_PLAYER;
     return object;

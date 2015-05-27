@@ -67,6 +67,10 @@ int readPool(Scene *scene){
             case 11:
                 RecvPlayerReady(recvPool.queue[i]);
                 break;
+            case NET_PLAYER_CLASS:
+                RecvPlayerClass(recvPool.queue[i], scene);
+                printf("Received player class\n");
+                break;
             default:
                 break;
         }

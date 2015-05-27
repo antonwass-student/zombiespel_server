@@ -13,7 +13,7 @@ int Update(Scene* scene)
                 scene->objects[i].bulletInfo.timetolive--;
             else if(scene->objects[i].bulletInfo.timetolive == 0)
             {
-                printf("Bullet time expired. removing id %d\n", scene->objects[i].obj_id);
+                //printf("Bullet time expired. removing id %d\n", scene->objects[i].obj_id);
                 RemoveObject(scene, scene->objects[i].obj_id);
                 continue;
             }

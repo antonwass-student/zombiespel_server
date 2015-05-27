@@ -87,26 +87,34 @@ void ProximityCheck(GameObject* obj1, GameObject* obj2, int obj1_index,int obj2_
 
     if(obj1->type == OBJECT_PLAYER && obj2->type == OBJECT_ITEM) //player med item
     {
-        if(obj2->itemInfo.type == ITEM_MEDKIT && distance < 64) {
-            printf("Player picked up medkit\n");
+        if(obj2->itemInfo.type == ITEM_MEDKIT && distance < 100) {
             obj1->playerInfo.health += obj2->itemInfo.amount;
             SendPlayerHealth(obj1->obj_id, obj1->playerInfo.health);
             RemoveObject(scene, obj2->obj_id);
         }
-        else if(obj2->itemInfo.type == ITEM_WEAPON_1 && distance < 64) {
-            printf("collided with gun\n");
-            obj1->playerInfo.damage += obj2->itemInfo.amount;
+        else if(obj2->itemInfo.type == ITEM_WEAPON_1 && distance < 100) {
+            //printf("Collided with machine gun\n");
+            SendWeapon(obj1->obj_id, obj2->itemInfo.type);
             RemoveObject(scene, obj2->obj_id);
         }
-        else if(obj2->itemInfo.type == ITEM_ARMOR && distance < 64) {
-            printf("collided with armor\n");
-            if(obj1->playerInfo.armor>=50){
-                printf("you have max armor");
-            }
-            else{
+        else if(obj2->itemInfo.type == ITEM_ARMOR && distance < 100) {
             obj1->playerInfo.armor += obj2->itemInfo.amount;
-            RemoveObject(scene, obj2_index);
-            }
+            SendArmor(obj1->obj_id, obj2->itemInfo.amount);
+            RemoveObject(scene, obj2->obj_id);
+
+        }
+        else if(obj2->itemInfo.type == ITEM_AMMO && distance < 100) {
+            obj1->playerInfo.ammoTotal += obj2->itemInfo.amount;
+            SendAmmo(obj1->obj_id, obj2->itemInfo.amount);
+            RemoveObject(scene, obj2->obj_id);
+        }
+        else if(obj2->itemInfo.type == ITEM_WEAPON_2 && distance < 100) {
+            SendWeapon(obj1->obj_id, obj2->itemInfo.type);
+            RemoveObject(scene, obj2->obj_id);
+        }
+        else if(obj2->itemInfo.type == ITEM_WEAPON_3 && distance < 100) {
+            SendWeapon(obj1->obj_id, obj2->itemInfo.type);
+            RemoveObject(scene, obj2->obj_id);
         }
 
     }
@@ -180,7 +188,9 @@ void CollisionHandler(GameObject* collider1, GameObject* collider2, int c1_index
         else if(collider1->bulletInfo.type == BULLET_ZOMBIE && collider2->type == OBJECT_PLAYER)
         {
                 //TODO: Skada spelare
-                printf("Zombie bullet hit player\n");
+
+                collider2->playerInfo.health -= collider1->bulletInfo.damage;
+                SendPlayerHealth(collider2->obj_id, collider2->playerInfo.health);
                 RemoveObject(scene, collider1->obj_id);
         }
 

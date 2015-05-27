@@ -159,7 +159,7 @@ void SendBullet(GameObject bullet)
     }
 }
 
-void SendPlayerStats()
+void SendPlayerStats(Scene* scene)
 {
     int x = 2750, y = 5350, damage, health, speed;
 
@@ -185,7 +185,26 @@ void SendPlayerStats()
                     health = 100;
                     speed = 4;
                     break;
+                case CLASS_ENGINEER:
+                    damage = 15;
+                    health = 90;
+                    speed = 6;
+                    break;
+
             }
+
+            for(int i = 0; i < scene->objCount; i++)
+            {
+                if(client[j].playerId == scene->objects[i].obj_id)
+                {
+                    scene->objects[i].playerInfo.health = health;
+                    scene->objects[i].playerInfo.health = damage;
+                    scene->objects[i].playerInfo.health = speed;
+                    break;
+                }
+            }
+
+
 
             char data[128];
             int index = 1;
@@ -238,6 +257,31 @@ void SendSyncObjects(Scene* scene){
     }
 }
 
+void SendClassesFinal()
+{
+    for(int i = 0; i < N_CLIENTS; i++)
+    {
+        if(client[i].status)
+        {
+            char buffer[128];
+            int index = 0;
+            buffer[index++] = NET_PLAYER_CLASS_FINAL;
+            Converter_Int32ToBytes(buffer, &index, client[i].playerId);
+            buffer[index++] = client[i].pClass;
+
+            for(int j = 0; j < N_CLIENTS; j++)
+            {
+                if(client[j].status && client[j].playerId != client[i].playerId)
+                {
+                    SDLNet_TCP_Send(client[j].socket, buffer, 128);
+                }
+            }
+        }
+
+    }
+
+}
+
 void SendRemoveObject(int objId)
 {
     char msg[128];
@@ -266,6 +310,66 @@ void SendPlayerId(int PlayerId){
             SDLNet_TCP_Send(client[i].socket, msg, 128);
     }
 
+
+}
+
+void SendWeapon(int playerId, ItemType_T type)
+{
+    char data[128];
+    int index = 0;
+
+    data[index++] = NET_PLAYER_WEAPON;
+
+    data[index++] = type;
+
+    for(int i=0;i<N_CLIENTS;i++)
+    {
+        if(client[i].status == true && client[i].playerId == playerId)
+        {
+            SDLNet_TCP_Send(client[i].socket, data, 128);
+            break;
+        }
+    }
+}
+
+void SendArmor(int playerId, int amount)
+{
+    char data[128];
+    int index = 0;
+
+    data[index++] = NET_PLAYER_ARMOR;
+    Converter_Int32ToBytes(data, &index, amount);
+
+
+    for(int i=0;i<N_CLIENTS;i++)
+    {
+        if(client[i].status == true && client[i].playerId == playerId)
+        {
+            SDLNet_TCP_Send(client[i].socket, data, 128);
+            break;
+        }
+    }
+
+}
+
+void SendAmmo(int playerId, int amount)
+{
+    char data[128];
+    int index = 0;
+
+    data[index++] = NET_PLAYER_AMMO;
+    Converter_Int32ToBytes(data, &index, amount);
+
+
+    for(int i=0;i<N_CLIENTS;i++)
+    {
+        if(client[i].status == true && client[i].playerId == playerId)
+        {
+            SDLNet_TCP_Send(client[i].socket, data, 128);
+            break;
+        }
+
+    }
 
 }
 
@@ -323,6 +427,51 @@ void SendPlayerHealth(int playerId, int health)
             //printf("Sent player health\n");
             SDLNet_TCP_Send(client[i].socket, data, 128);
             //client[i].socket.close();
+            break;
+        }
+    }
+}
+
+void SendPlayerClass(PlayerClass_T pClass, char* name)
+{
+    char data[128];
+    int index = 0, nameLength = strlen(name);
+
+    data[index++] = NET_PLAYER_CLASS_REC;
+    Converter_Int32ToBytes(data, &index, nameLength);
+
+    for(int i = 0; i < nameLength; i++)
+    {
+        data[index++] = name[i];
+    }
+    data[index++] = pClass;
+
+    for(int i = 0; i < N_CLIENTS; i++)
+    {
+        if(client[i].status)
+        {
+            printf("Player class sent\n");
+            SDLNet_TCP_Send(client[i].socket, data, 128);
+        }
+    }
+}
+
+void RecvPlayerClass(char data[], Scene* scene)
+{
+    int playerId, index = 1;
+    PlayerClass_T pClass;
+
+    playerId = Converter_BytesToInt32(data, &index);
+    pClass = data[index++];
+
+    printf("PlayerId = %d\n", playerId);
+
+    for(int i = 0; i < N_CLIENTS; i++)
+    {
+        if(client[i].playerId == playerId)
+        {
+            client[i].pClass = pClass;
+            SendPlayerClass(pClass, client[i].name);
             break;
         }
     }
