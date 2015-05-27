@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 spel_server. All rights reserved.
 //
 
-
-#define N_CLIENTS 2
 #include <stdio.h>
 #include "server_structs.h"
 

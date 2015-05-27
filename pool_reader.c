@@ -22,7 +22,7 @@
 
 void chat_msg(int n){
     //string msg, string sender (ändra till playerId och sätta först??)
-    char msg[128];
+    //char msg[128];
     int i;
     for (i=1; i<128; i++) {
         if (recvPool.queue[n][i]== '\n' || recvPool.queue[n][i]== '\0' ) {
@@ -36,8 +36,8 @@ void chat_msg(int n){
 
 void player_shoot(int n, Scene* scene){
     //int playerId, int angle
-    int id = recvPool.queue[n][1];
-    int angle = recvPool.queue[n][2];
+    //int id = recvPool.queue[n][1];
+    //int angle = recvPool.queue[n][2];
 }
 
 int readPool(Scene *scene){
@@ -65,7 +65,7 @@ int readPool(Scene *scene){
                 printf("Message with ID 8 was received.\n");
                 break;
             case 11:
-                RecvPlayerReady(recvPool.queue[i]);
+                RecvPlayerReady(recvPool.queue[i], scene);
                 break;
             default:
                 break;
