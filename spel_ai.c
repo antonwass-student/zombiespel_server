@@ -3,7 +3,7 @@
 #include "server_structs.h"
 #include "spel_objects.h"
 #include <math.h>
-//#define M_PI 3.14
+#define M_PI 3.14
 
 SDL_Rect* FindPlayer(Scene* scene, GameObject* zombie, int range);
 

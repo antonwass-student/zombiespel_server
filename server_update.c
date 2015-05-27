@@ -1,6 +1,8 @@
 #include "server_structs.h"
 #include "server_collision.h"
 
+#define M_PI 3.14
+
 int Update(Scene* scene)
 {
     int i;

@@ -49,9 +49,7 @@ int main(int argc, char **argv)
     pthread_t listener;
     printf("Starting listener thread.\n");
     pthread_create(&listener,NULL, &client_handle, (void*)&level);
-    newObject=CreateZombie(0,0, level.nextId++);
-    AddObject(&level, newObject, false);
-    //SendNewObject(newObject.obj_id, newObject.x, newObject.y, OBJECT_ZOMBIE_NORMAL);
+
     int i;
     printf("Lobby is open.\nWaiting for connection\n_______\n");
 
@@ -102,7 +100,7 @@ int main(int argc, char **argv)
     newObject=CreateZombieSpitter(3100,4000, level.nextId++);
     AddObject(&level, newObject, true);
 
-    newObject = CreateMedkit(3100,4800, level.nextId++);
+    newObject = CreateMedkit(3200,4900, level.nextId++);
     AddObject(&level, newObject, true);
 
     newObject = CreateAmmo(3100,4800, level.nextId++);
