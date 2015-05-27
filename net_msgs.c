@@ -21,7 +21,6 @@
 #include <pthread.h>
 
 
-#define N_CLIENTS 4
 msg_stack recvPool;
 pthread_mutex_t pool_mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -31,7 +30,8 @@ void poolInit(){
 
 void connectionInit()
 {
-    for(int i = 0; i < N_CLIENTS; i++)
+    int i;
+    for(i = 0; i < N_CLIENTS; i++)
     {
         client[i].status = false;
         client[i].ready = false;
@@ -75,7 +75,7 @@ int AddToPool(char* msg) // Funktion fˆr att l‰gga till meddelanden i stacks 
 
 void SendObjectPos(int objId, int x, int y, int angle)
 {
-    char msg[128];
+    unsigned char msg[128];
 
     int index=1, i;
     msg[0]=2;
@@ -105,7 +105,7 @@ void SendNewObject(int objId, int x, int y, objectType_t type, char* name)
     Converter_Int32ToBytes(msg, &index, strlen(name));
     //printf("Sent object%s(%d) to clients\n", name, objId);
 
-    for(int i = 0; i < strlen(name); i++)
+    for(i = 0; i < strlen(name); i++)
     {
         msg[index++] = name[i];
     }
@@ -122,8 +122,8 @@ void SendGameStart()
 {
     char data[128];
     data[0] = NET_GAME_START;
-
-    for(int j = 0; j < N_CLIENTS; j++)
+    int j;
+    for(j = 0; j < N_CLIENTS; j++)
     {
         if(client[j].status)
         {
@@ -135,8 +135,8 @@ void SendGameStart()
 
 void SendBullet(GameObject bullet)
 {
-    char data[128];
-    int index = 1;
+    unsigned char data[128];
+    int index = 1, j;
     data[0] = NET_OBJECT_BULLET;
 
     Converter_Int32ToBytes(data, &index, bullet.obj_id);
@@ -149,7 +149,7 @@ void SendBullet(GameObject bullet)
 
     //printf("Sending bullet to clients with angle = '%d'\n", bullet.bulletInfo.angle);
 
-    for(int j = 0; j < N_CLIENTS; j++)
+    for(j = 0; j < N_CLIENTS; j++)
     {
         if(client[j].status)
         {
@@ -161,10 +161,10 @@ void SendBullet(GameObject bullet)
 
 void SendPlayerStats(Scene* scene)
 {
-    int x = 2750, y = 5350, damage, health, speed;
+    int j, x = 2750, y = 5350, damage, health, speed;
 
 
-    for(int j = 0; j < N_CLIENTS; j++)
+    for(j = 0; j < N_CLIENTS; j++)
     {
         if(client[j].status)
         {
@@ -198,15 +198,15 @@ void SendPlayerStats(Scene* scene)
                 if(client[j].playerId == scene->objects[i].obj_id)
                 {
                     scene->objects[i].playerInfo.health = health;
-                    scene->objects[i].playerInfo.health = damage;
-                    scene->objects[i].playerInfo.health = speed;
+                    scene->objects[i].playerInfo.damage = damage;
+                    scene->objects[i].playerInfo.speed = speed;
                     break;
                 }
             }
 
 
+            unsigned char data[128];
 
-            char data[128];
             int index = 1;
 
             data[0] = NET_PLAYER_STATS;
@@ -226,11 +226,11 @@ void SendPlayerStats(Scene* scene)
 }
 
 void SendSyncObjects(Scene* scene){
-    int i;
+    int i,j;
     printf("Sending SyncObjects.\n");
     for(i = 0; i < scene->objCount; i++)
     {
-        char msg[128];
+        unsigned char msg[128];
         int index=1;
         msg[0]=5;
         Converter_Int32ToBytes(msg, &index, scene->objects[i].obj_id);
@@ -240,12 +240,12 @@ void SendSyncObjects(Scene* scene){
         Converter_Int32ToBytes(msg, &index, strlen(scene->objects[i].name));
         //printf("Sent object with namelength = %d\n", strlen(scene->objects[i].name));
 
-        for(int j = 0; j < strlen(scene->objects[i].name); j++)
+        for(j = 0; j < strlen(scene->objects[i].name); j++)
         {
             msg[index++] = scene->objects[i].name[j];
         }
 
-        for(int j = 0; j < N_CLIENTS; j++)
+        for(j = 0; j < N_CLIENTS; j++)
         {
             if(client[j].status && scene->objects[i].obj_id != client[j].playerId)
             {
@@ -284,7 +284,7 @@ void SendClassesFinal()
 
 void SendRemoveObject(int objId)
 {
-    char msg[128];
+    unsigned char msg[128];
     int index=1, i;
     msg[0]=6;
     Converter_Int32ToBytes(msg, &index, objId);
@@ -299,12 +299,12 @@ void SendRemoveObject(int objId)
 
 void SendPlayerId(int PlayerId){
     unsigned char msg[128];
-    int index=1;
+    int index=1,i;
     msg[0]=7;
     //printf("Player id = '%d'\n",PlayerId);
     Converter_Int32ToBytes(msg, &index, PlayerId);
     //printf("debug1\n");
-    for(int i=0;i<N_CLIENTS;i++)
+    for(i=0;i<N_CLIENTS;i++)
     {
         if(client[i].status == true && client[i].playerId == PlayerId)
             SDLNet_TCP_Send(client[i].socket, msg, 128);
@@ -376,14 +376,14 @@ void SendAmmo(int playerId, int amount)
 void SendLobbyPlayer(char* playerName, char pClass, int playerId)
 {
     unsigned char data[128];
-    int index = 1;
+    int index = 1,i;
     int length = strlen(playerName);
 
     data[0] = NET_LOBBY_PLAYER;
 
     Converter_Int32ToBytes(data, &index, length);
 
-    for(int i = 0; i < length; i++)
+    for(i = 0; i < length; i++)
     {
         data[index + i] = playerName[i];
         //printf("Packing down name at index %d\n", index + i);
@@ -394,7 +394,7 @@ void SendLobbyPlayer(char* playerName, char pClass, int playerId)
 
     //printf("Sending player with name %s to clients\n", playerName);
 
-    for(int i = 0; i < N_CLIENTS; i++)
+    for(i = 0; i < N_CLIENTS; i++)
     {
         if(client[i].status == true)
         {
@@ -413,14 +413,14 @@ void SendLobbyPlayer(char* playerName, char pClass, int playerId)
 
 void SendPlayerHealth(int playerId, int health)
 {
-    char data[128];
-    int index = 0;
+    unsigned char data[128];
+    int index = 0,i;
 
     data[index++] = NET_PLAYER_HEALTH;
     Converter_Int32ToBytes(data, &index, health);
     //TODO: kanske lägga till så att man skickar ut health till andra spelare också.
 
-    for(int i = 0; i < N_CLIENTS; i++)
+    for(i = 0; i < N_CLIENTS; i++)
     {
         if(client[i].playerId == playerId)
         {
@@ -477,11 +477,12 @@ void RecvPlayerClass(char data[], Scene* scene)
     }
 }
 
-void RecvPlayerShoot(char data[], Scene* scene)
+
+void RecvPlayerShoot(unsigned char data[], Scene* scene)
 {
     int index = 1;
     int shooterId, x, y, angle, damage, speed;
-    bulletType_T bType;
+    //bulletType_T bType;
 
     shooterId = Converter_BytesToInt32(data, &index);
     x = Converter_BytesToInt32(data, &index);
@@ -498,8 +499,8 @@ void RecvPlayerShoot(char data[], Scene* scene)
 
 }
 
-void RecvPlayerPos(char data[], Scene* scene){
-    int index = 1;
+void RecvPlayerPos(unsigned char data[], Scene* scene){
+    int index = 1,i;
     int playerId, x, y, angle;
 
     playerId = Converter_BytesToInt32(data, &index);
@@ -507,7 +508,7 @@ void RecvPlayerPos(char data[], Scene* scene){
     y = Converter_BytesToInt32(data, &index);
     angle = (float)Converter_BytesToInt32(data, &index);
 
-    for(int i = 0; i < 128; i++)
+    for(i = 0; i < 128; i++)
     {
         if(scene->objects[i].obj_id == playerId)
         {
@@ -525,14 +526,14 @@ void RecvPlayerPos(char data[], Scene* scene){
 
 void RecvPlayerReady(unsigned char data[], Scene *scene)
 {
-    int index = 1;
+    int index = 1,i,j;
     int playerId = Converter_BytesToInt32(data, &index);
 
     index = 0;
     data[index++] = NET_PLAYER_READY;
 
 
-    for(int i = 0; i < N_CLIENTS; i++)
+    for(i = 0; i < N_CLIENTS; i++)
     {
         if(client[i].status && client[i].playerId == playerId)
         {
@@ -540,14 +541,14 @@ void RecvPlayerReady(unsigned char data[], Scene *scene)
 
             Converter_Int32ToBytes(data, &index, strlen(client[i].name));
 
-            for(int j = 0; j < strlen(client[i].name); j++)
+            for(j = 0; j < strlen(client[i].name); j++)
             {
                 data[index++] = client[i].name[j];
             }
             data[index++] = '\0';
             //printf("test\n");
 
-            for(int j = 0; j < 4; j++) //Sends to all other clients that the player who sent ready is ready.
+            for(j = 0; j < 4; j++) //Sends to all other clients that the player who sent ready is ready.
             {
                 if(client[j].status)
                 {

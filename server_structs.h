@@ -21,7 +21,7 @@
 #include <stdbool.h>
 #include <pthread.h>
 #define N_CLIENTS 4
-#define M_PI 3.14
+
 
 typedef enum{
     NET_CHAT_MSG = 1,
@@ -169,7 +169,7 @@ typedef struct{
 } Scene;
 
 typedef struct{
-    char queue[128][128]; //Kö från klienterna till main
+    unsigned char queue[128][128]; //Kö från klienterna till main
     int size;
 
 }msg_stack;

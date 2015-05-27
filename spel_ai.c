@@ -3,7 +3,7 @@
 #include "server_structs.h"
 #include "spel_objects.h"
 #include <math.h>
-#define M_PI 3.14
+//#define M_PI 3.14
 
 SDL_Rect* FindPlayer(Scene* scene, GameObject* zombie, int range);
 
@@ -52,9 +52,10 @@ void Zombie_UseBrain(Scene* scene, GameObject* zombie, int index)
 
 int Zombie_Attack(GameObject* zombie, Scene* scene)
 {
+    int i;
     //printf("zombie attacked\n");
     zombie->ai.atkTimer--;
-    for(int i = 0; i < scene->objCount; i++)
+    for(i = 0; i < scene->objCount; i++)
     {
         if(scene->objects[i].type == OBJECT_PLAYER)
         {
@@ -73,6 +74,7 @@ int Zombie_Attack(GameObject* zombie, Scene* scene)
             break;
         }
     }
+    return EXIT_SUCCESS;
 }
 
 int Zombie_Shoot(GameObject* zombie, Scene* scene)
@@ -99,8 +101,9 @@ int Zombie_Shoot(GameObject* zombie, Scene* scene)
 
 SDL_Rect* FindPlayer(Scene* scene, GameObject* zombie, int range)
 {
+    int i;
     //printf("Initiated FindPlayer()\n");
-    for(int i = 0; i < scene->objCount ; i++)
+    for(i = 0; i < scene->objCount ; i++)
     {
         int distance = 10;
 

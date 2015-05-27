@@ -3,7 +3,8 @@
 
 int Update(Scene* scene)
 {
-    for(int i = 0; i < scene->objCount; i++)
+    int i;
+    for(i = 0; i < scene->objCount; i++)
     {
         int x = 0, y = 0;
 
@@ -31,4 +32,5 @@ int Update(Scene* scene)
             MoveObject(&scene->objects[i], scene, 0, 0, i);
         }
     }
+    return EXIT_SUCCESS;
 }

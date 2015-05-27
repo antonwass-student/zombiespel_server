@@ -35,7 +35,7 @@ int main(int argc, char **argv)
     int deltaTime = SDL_GetTicks();
 
     bool lobbyReady = false;
-    bool anyoneHere = false;
+    //bool anyoneHere = false;
     //GameObject objects[100];
     Scene level;
     GameObject newObject;
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
     {
         readPool(&level);
 
-        for(int i = 0; i < N_CLIENTS; i++)
+        for(i = 0; i < N_CLIENTS; i++)
         {
             if(client[i].status)
             {
@@ -139,7 +139,7 @@ int main(int argc, char **argv)
         }
         deltaTime=SDL_GetTicks();
     }
-    printf("Server stopped\n");
-    pthread_join(listener, NULL);
+    //printf("Server stopped\n");
+    //pthread_join(listener, NULL);
     return EXIT_SUCCESS;
 }

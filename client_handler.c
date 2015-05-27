@@ -23,13 +23,13 @@
 #include "spel_objects.h"
 #include "net_msgs.h"
 
-#define N_CLIENTS 4
+//#define N_CLIENTS 4
 
 
 void* client_handle(void* objs){
     TCPsocket sd, csd, tmp; /* Socket descriptor, Client socket descriptor */
     IPaddress ip, *remoteIP;
-    int listening = 1, i=0;
+    int listening = 1, i=0,j=0;
     int sockets_available=1;
 
     Scene *level = (Scene*)objs;// = *(GameObject*) objs;
@@ -88,11 +88,11 @@ void* client_handle(void* objs){
                         int nameLength = Converter_BytesToInt32(msg, &index);
 
                         //printf("Length = '%d'\n", nameLength);
-                        for (int j = 0; j<nameLength; j++) {
+                        for (j = 0; j<nameLength; j++) {
                             client[i].name[j] = (char) msg[j+index];
                         }
 
-                        for(int j = 0; j< 4;j++)
+                        for(j = 0; j< 4;j++)
                         {
                             if(!strcmp(client[j].name, client[i].name) && i != j)
                             {
@@ -122,7 +122,7 @@ void* client_handle(void* objs){
 
                         client[i].pClass = msg[index];
 
-                        for(int j = 0; j < 4 ; j++)
+                        for(j = 0; j < 4 ; j++)
                         {
                             if(client[j].status)
                             {
