@@ -17,7 +17,7 @@ void chat_msg(int n){
     //string msg, string sender (ändra till playerId och sätta först??)
     //char msg[128];
     int i;
-    for (i=1; i<128; i++) {
+    for (i=1; i<512; i++) {
         if (recvPool.queue[n][i]== '\n' || recvPool.queue[n][i]== '\0' ) {
             break;
         }

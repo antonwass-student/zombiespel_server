@@ -205,13 +205,15 @@ GameObject CreateZombie(int x, int y, int id)
 
     object.ai.health = 100;
     object.ai.attackRange = 100;
-    object.ai.detectRange = 400;
+    object.ai.detectRange = 700;
     object.ai.speed = 5;
     object.ai.ai = AI_ZOMBIE;
     object.ai.atkCd = 120;
     object.ai.atkTimer = 30;
     object.ai.damage = 30;
     object.ai.target = NULL;
+    object.ai.tsCounter=60;
+    object.ai.tsFreq=30;
     return object;
 }
 
@@ -228,17 +230,20 @@ GameObject CreateZombieSpitter(int x, int y, int id)
     strcpy(object.name, "ZombieSpitter");
 
     object.ai.health = 100;
-    object.ai.attackRange = 300;
-    object.ai.detectRange = 400;
+    object.ai.attackRange = 600;
+    object.ai.detectRange = 700;
     object.ai.speed = 5;
     object.ai.ai = AI_SPITTER;
     object.ai.atkCd = 30;
     object.ai.atkTimer = 30;
     object.ai.damage = 30;
     object.ai.target = NULL;
+    object.ai.tsCounter=60;
+    object.ai.tsFreq=30;
 
     object.ai.fireRate = 60;
     object.ai.fireCount = 60;
+    object.ai.bulletSpeed = 5;
     return object;
 }
 

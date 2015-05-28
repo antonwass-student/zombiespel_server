@@ -26,9 +26,9 @@ exit
 #include "client_handler.h"
 #include "net_msgs.h"
 #include "pool_reader.h"
-//#include "server_update.h"
+#include "spel_ai.h"
+#include "server_update.h"
 
-int Update(Scene* scene);
 
 int nextId = 0;
 
@@ -36,10 +36,13 @@ int nextId = 0;
 int main(int argc, char **argv)
 {
     int deltaTime = SDL_GetTicks();
-
+    int i;
     bool lobbyReady = false;
     //bool anyoneHere = false;
     //GameObject objects[100];
+    bool netUpdate=false;
+    int netUpdateTimer=12;
+    int netUpdateRate=12;
     Scene level;
     GameObject newObject;
 
@@ -52,8 +55,17 @@ int main(int argc, char **argv)
     pthread_t listener;
     printf("Starting listener thread.\n");
     pthread_create(&listener,NULL, &client_handle, (void*)&level);
+    
+    for(i=0;i<15;i++){
+        newObject=CreateZombieSpitter(1500 + 200*i,4000, level.nextId++);
+        AddObject(&level, newObject, false);
+    }
+    for(i=0;i<15;i++){
+        newObject=CreateZombieSpitter(1500 + 200*i,3800, level.nextId++);
+        AddObject(&level, newObject, false);
+    }
 
-    int i;
+   
     printf("Lobby is open.\nWaiting for connection\n_______\n");
 
     while(!lobbyReady) //Lobby loop
@@ -100,8 +112,6 @@ int main(int argc, char **argv)
     //newObject=CreateZombieSpitter(2900,4800, level.nextId++);
     //AddObject(&level, newObject, true);
 
-    newObject=CreateZombieSpitter(3100,4000, level.nextId++);
-    AddObject(&level, newObject, true);
 
     newObject = CreateMedkit(3200,4900, level.nextId++);
     AddObject(&level, newObject, true);
@@ -159,7 +169,7 @@ int main(int argc, char **argv)
     
     newObject=CreateZombie(826,3031, level.nextId++);
     AddObject(&level, newObject, true);
-    
+    /*
     newObject=CreateZombie(611,3126, level.nextId++);
     AddObject(&level, newObject, true);
     
@@ -185,16 +195,22 @@ int main(int argc, char **argv)
     AddObject(&level, newObject, true);
     
     newObject=CreateZombie(2166,3766, level.nextId++);
-    AddObject(&level, newObject, true);
+    AddObject(&level, newObject, true);*/
     
     printf("_______________\n***Game started****\n");
 
     while (1)
     { //GAMELOOP
         int netLoad;
+        netUpdateTimer--;
+        if(netUpdateTimer==0){
+            netUpdate=true;
+            netUpdateTimer=netUpdateRate;
+        
+        }
         netLoad = readPool(&level);//Läser nätverksmeddelanden från klienter
 
-        Update(&level); //Uppdaterar alla objekt på servern
+        Update(&level,netUpdate); //Uppdaterar alla objekt på servern
 
         deltaTime = SDL_GetTicks() - deltaTime;
         if (deltaTime < 17){
@@ -203,6 +219,7 @@ int main(int argc, char **argv)
                 printf("***Warning***\n high server load = %d\n**********\n",17-deltaTime);
         }
         deltaTime=SDL_GetTicks();
+        netUpdate=false;
     }
     //printf("Server stopped\n");
     //pthread_join(listener, NULL);

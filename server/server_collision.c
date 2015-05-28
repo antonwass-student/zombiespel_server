@@ -163,7 +163,7 @@ void ProximityCheck(GameObject* obj1, GameObject* obj2, int obj1_index,int obj2_
 
 void CollisionHandler(GameObject* collider1, GameObject* collider2, int c1_index, int c2_index, Scene* scene)
 {
-    //int newObject = -1;
+
     //printf("CollisionHandler with object1:%d and object2:%d\n",collider1->obj_id,collider2->obj_id);
     if(collider1->type == OBJECT_BULLET)
     {
@@ -189,8 +189,11 @@ void CollisionHandler(GameObject* collider1, GameObject* collider2, int c1_index
                 //  TODO:::Skapa någon slags drop-funktion.
                 //createObject(scene, OBJECT_ITEM, "MedKit", collider2->rect.x, collider2->rect.y, 50, 50, TXT_MEDKIT, false); //Lägg till create medkit
             }
+            else
+            {
             printf("Bullet(%d) being removed.\n", collider1->obj_id);
             RemoveObject(scene, collider1->obj_id);
+            }
         }
         else if(collider1->bulletInfo.type == BULLET_ZOMBIE && collider2->type == OBJECT_PLAYER)
         {

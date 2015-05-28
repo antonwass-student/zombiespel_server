@@ -127,6 +127,8 @@ typedef struct{
     bool* targetIsAlive;
     int fireRate;
     int fireCount;
+    int tsCounter;
+    int tsFreq;
 }AI;
 
 typedef struct{
@@ -154,7 +156,7 @@ typedef struct{
 }GameObject;
 
 typedef struct{
-    GameObject objects[128];
+    GameObject objects[1024];
     int objCount;
     int nextId;
     SDL_mutex *obj_mutex;

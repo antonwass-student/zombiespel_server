@@ -95,7 +95,7 @@ void SendNewObject(int objId, int x, int y, objectType_t type, char* name)
     Converter_Int32ToBytes(msg, &index, x);
     Converter_Int32ToBytes(msg, &index, y);
     msg[index++]=type;
-    Converter_Int32ToBytes(msg, &index, strlen(name));
+    Converter_Int32ToBytes(msg, &index,(int)strlen(name));
     //printf("Sent object%s(%d) to clients\n", name, objId);
 
     for(i = 0; i < strlen(name); i++)
@@ -230,7 +230,7 @@ void SendSyncObjects(Scene* scene){
         Converter_Int32ToBytes(msg, &index, scene->objects[i].rect.x);
         Converter_Int32ToBytes(msg, &index, scene->objects[i].rect.y);
         msg[index++]=scene->objects[i].type;
-        Converter_Int32ToBytes(msg, &index, strlen(scene->objects[i].name));
+        Converter_Int32ToBytes(msg, &index, (int)strlen(scene->objects[i].name));
 
         //printf("Sent object with namelength = %d\n", strlen(scene->objects[i].name));
 
@@ -372,7 +372,7 @@ void SendLobbyPlayer(char* playerName, char pClass, int playerId)
 {
     unsigned char data[128];
     int index = 1,i;
-    int length = strlen(playerName);
+    int length = (int)strlen(playerName);
 
     data[0] = NET_LOBBY_PLAYER;
 
@@ -431,7 +431,7 @@ void SendPlayerClass(PlayerClass_T pClass, char* name)
 {
     unsigned char data[128];
     int index = 0;
-    int nameLength = strlen(name);
+    int nameLength = (int)strlen(name);
 
     data[index++] = NET_PLAYER_CLASS_REC;
     Converter_Int32ToBytes(data, &index, nameLength);
@@ -504,16 +504,15 @@ void RecvPlayerPos(unsigned char data[], Scene* scene){
     y = Converter_BytesToInt32(data, &index);
     angle = (float)Converter_BytesToInt32(data, &index);
 
-    for(i = 0; i < 128; i++)
+    for(i = 0; i < scene->objCount; i++)
     {
         if(scene->objects[i].obj_id == playerId)
         {
-            if(scene->objects[i].rect.x != x && scene->objects[i].rect.y != y)
-            {
+
                 scene->objects[i].rect.x = x;
                 scene->objects[i].rect.y = y;
                 SendObjectPos(playerId, x, y, angle);
-            }
+            
 
             break;
         }
@@ -535,7 +534,7 @@ void RecvPlayerReady(unsigned char data[], Scene *scene)
         {
             printf("Player %s is ready\n", client[i].name);
 
-            Converter_Int32ToBytes(data, &index, strlen(client[i].name));
+            Converter_Int32ToBytes(data, &index, (int)strlen(client[i].name));
 
             for(j = 0; j < strlen(client[i].name); j++)
             {
@@ -544,7 +543,7 @@ void RecvPlayerReady(unsigned char data[], Scene *scene)
             data[index++] = '\0';
             //printf("test\n");
 
-            for(j = 0; j < 4; j++) //Sends to all other clients that the player who sent ready is ready.
+            for(j = 0; j < N_CLIENTS; j++) //Sends to all other clients that the player who sent ready is ready.
             {
                 if(client[j].status)
                 {

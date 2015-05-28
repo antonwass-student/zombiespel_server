@@ -11,14 +11,14 @@
 
 void* client_process(void* arg)
 {
-    char buffer[128];
+    char buffer[512]={0};
     int quit = 0;
     int i = *(int*) arg;
     while (!quit)
     {
         //SDL_Delay(10);
 
-        if (SDLNet_TCP_Recv(client[i].socket, buffer, 128) > 0)
+        if (SDLNet_TCP_Recv(client[i].socket, buffer, 512) > 0)
         {
             AddToPool(buffer);
             if(strcmp(buffer, "exit") == 0)	/* Terminate this connection */

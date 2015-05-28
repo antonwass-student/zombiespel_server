@@ -1,9 +1,10 @@
 #include "server_structs.h"
 #include "server_collision.h"
 #include "spel_objects.h"
+#include "spel_ai.h"
 //#define M_PI 3.14
-void Zombie_UseBrain(Scene* scene, GameObject* zombie, int index);
-int Update(Scene* scene)
+
+int Update(Scene* scene,bool netUpdate)
 {
     int i;
     for(i = 0; i < scene->objCount; i++)
@@ -27,7 +28,7 @@ int Update(Scene* scene)
         }
         else if(scene->objects[i].type == OBJECT_NPC || scene->objects[i].type == OBJECT_ZOMBIE_SPITTER ) //NPC update
         {
-            Zombie_UseBrain(scene, &scene->objects[i],i);
+            Zombie_UseBrain(scene, &scene->objects[i],i, netUpdate);
         }
         else if(scene->objects[i].type == OBJECT_PLAYER)
         {

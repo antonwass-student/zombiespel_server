@@ -5,13 +5,9 @@
 #include "server_collision.h"
 #include <math.h>
 #include "net_msgs.h"
+#include "spel_ai.h"
 
-void Zombie_UseBrain(Scene* scene, GameObject* zombie, int index);
-int Zombie_Attack(GameObject* zombie, Scene* scene);
-int Zombie_Shoot(GameObject* zombie, Scene* scene);
-SDL_Rect* FindPlayer(Scene* scene, GameObject* zombie, int range);
-
-void Zombie_UseBrain(Scene* scene, GameObject* zombie, int index)
+void Zombie_UseBrain(Scene* scene, GameObject* zombie, int index, bool netUpdate)
 {
     int dx, dy;
 
@@ -19,7 +15,15 @@ void Zombie_UseBrain(Scene* scene, GameObject* zombie, int index)
     {
         zombie->ai.atkTimer--;
     }
-
+    if(zombie->ai.tsCounter>0){
+        zombie->ai.tsCounter--;
+        
+    }
+    else{
+        zombie->ai.target = NULL;
+        zombie->ai.tsCounter=zombie->ai.tsFreq;
+    
+    }
     if(zombie->ai.target == NULL)
     {
         //printf("Searching for a target.\n");
@@ -27,7 +31,6 @@ void Zombie_UseBrain(Scene* scene, GameObject* zombie, int index)
     }
     if(zombie->ai.target == NULL)
             return;
-
     dx = zombie->rect.x - (zombie->ai.target->x + (zombie->ai.target->w /2));
     dy = zombie->rect.y - (zombie->ai.target->y + (zombie->ai.target->h /2));
     zombie->rotation = 270 + (atan2(dy,dx)*180/M_PI);
@@ -44,14 +47,15 @@ void Zombie_UseBrain(Scene* scene, GameObject* zombie, int index)
 
         //printf("Sent object pos to server\n");
     }
-    else if(GetDistance(*zombie->ai.target,zombie->rect) < zombie->ai.attackRange)
+    else if(GetDistance(*zombie->ai.target,zombie->rect) <= zombie->ai.attackRange)
     {
         if(zombie->ai.ai == AI_SPITTER)
             Zombie_Shoot(zombie, scene);
         else if(zombie->ai.ai == AI_ZOMBIE)
             Zombie_Attack(zombie, scene);
     }
-    SendObjectPos(zombie->obj_id, zombie->rect.x, zombie->rect.y, (int)zombie->rotation);
+    if(netUpdate)
+        SendObjectPos(zombie->obj_id, zombie->rect.x, zombie->rect.y, (int)zombie->rotation);
 }
 
 int Zombie_Attack(GameObject* zombie, Scene* scene)
