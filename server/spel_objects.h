@@ -1,11 +1,3 @@
-//
-//  spel_objects.h
-//  SDL_net
-//
-//  Created by cristian araya on 08/05/15.
-//  Copyright (c) 2015 project. All rights reserved.
-//
-
 #ifndef __SDL_net__spel_objects__
 #define __SDL_net__spel_objects__
 

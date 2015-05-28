@@ -1,8 +1,8 @@
 #include "server_structs.h"
 #include "server_collision.h"
-
-#define M_PI 3.14
-
+#include "spel_objects.h"
+//#define M_PI 3.14
+void Zombie_UseBrain(Scene* scene, GameObject* zombie, int index);
 int Update(Scene* scene)
 {
     int i;

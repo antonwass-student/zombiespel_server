@@ -1,11 +1,3 @@
-//
-//  net_msgs.h
-//  SDL_net
-//
-//  Created by cristian araya on 06/05/15.
-//  Copyright (c) 2015 project. All rights reserved.
-//
-
 #ifndef __SDL_net__net_msgs__
 #define __SDL_net__net_msgs__
 
@@ -28,7 +20,13 @@ void SendRemoveObject(int objId); //MSG 6
 void SendLobbyPlayer(char* playerName, char pClass, int playerId);
 void SendSyncObjects(Scene* scene);
 void SendPlayerId(int PlayerId); //MSG 7
+void RecvPlayerClass(unsigned char data[], Scene* scene);
 void RecvPlayerReady(unsigned char data[], Scene *scene);
 void RecvPlayerPos(unsigned char data[], Scene* scene);
+void SendBullet(GameObject bullet);
+void SendWeapon(int playerId, ItemType_T type);
+void SendArmor(int playerId, int amount);
+void SendAmmo(int playerId, int amount);
+void SendClassesFinal();
 
 #endif /* defined(__SDL_net__net_msgs__) */

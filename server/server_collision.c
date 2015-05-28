@@ -1,6 +1,7 @@
 #include "server_collision.h"
 #include "server_structs.h"
 #include "spel_objects.h"
+#include "net_msgs.h"
 
 bool MoveObject(GameObject* movingObject, Scene* scene, int speedX, int speedY, int objectIndex){
     bool colUp = false, colDown = false, colLeft = false, colRight = false;

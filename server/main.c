@@ -6,10 +6,11 @@ exit
 #endif
 
 #ifdef __APPLE__
-#include <SDL2/SDL.h>
+#include "SDL2/SDL.h"
 #include "SDL2_net/SDL_net.h"
 
 #elif __linux
+#include "SDL2/SDL.h"
 #include "SDL2/SDL_net.h"
 #endif
 
@@ -26,6 +27,8 @@ exit
 #include "net_msgs.h"
 #include "pool_reader.h"
 //#include "server_update.h"
+
+int Update(Scene* scene);
 
 int nextId = 0;
 
@@ -117,9 +120,73 @@ int main(int argc, char **argv)
 
     newObject = CreateMachineGun(3400,4800, level.nextId++);
     AddObject(&level, newObject, true);
-
-
-
+    
+    newObject=CreateZombie(2500,4000, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(2600,4000, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(2496,1406, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(2806,1406, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(2656,2156, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(2016,1941, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(1496,1696, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(866,1946, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(831,2216, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(1181,2541, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(1176,2741, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(921,2786, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(826,3031, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(611,3126, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(611,3441, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(846,3476, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(1026,3476, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(1381,3526, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(1356,3761, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(1281,4191, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(1941,4206, level.nextId++);
+    AddObject(&level, newObject, true);
+    
+    newObject=CreateZombie(2166,3766, level.nextId++);
+    AddObject(&level, newObject, true);
+    
     printf("_______________\n***Game started****\n");
 
     while (1)

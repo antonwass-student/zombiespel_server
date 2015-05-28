@@ -1,16 +1,9 @@
-//
-//  client_handler.c
-//  SDL_net
-//
-//  Created by cristian araya on 08/05/15.
-//  Copyright (c) 2015 project. All rights reserved.
-//
-
 #ifdef __APPLE__
-#include <SDL2/SDL.h>
+#include "SDL2/SDL.h"
 #include "SDL2_net/SDL_net.h"
 
 #elif __linux
+#include "SDL2/SDL.h"
 #include "SDL2/SDL_net.h"
 #endif
 
@@ -22,9 +15,6 @@
 #include "client_process.h"
 #include "spel_objects.h"
 #include "net_msgs.h"
-
-//#define N_CLIENTS 4
-
 
 void* client_handle(void* objs){
     TCPsocket sd, csd, tmp; /* Socket descriptor, Client socket descriptor */

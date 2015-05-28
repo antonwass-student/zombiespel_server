@@ -1,10 +1,3 @@
-//
-//  pool_reader.c
-//  spel_server
-//
-//  Created by cristian araya on 12/05/15.
-//  Copyright (c) 2015 spel_server. All rights reserved.
-//
 #ifdef __APPLE__
 #include "SDL2_net/SDL_net.h"
 

@@ -2,9 +2,13 @@
 
 #include "server_structs.h"
 #include "spel_objects.h"
+#include "server_collision.h"
 #include <math.h>
-#define M_PI 3.14
+#include "net_msgs.h"
 
+void Zombie_UseBrain(Scene* scene, GameObject* zombie, int index);
+int Zombie_Attack(GameObject* zombie, Scene* scene);
+int Zombie_Shoot(GameObject* zombie, Scene* scene);
 SDL_Rect* FindPlayer(Scene* scene, GameObject* zombie, int range);
 
 void Zombie_UseBrain(Scene* scene, GameObject* zombie, int index)

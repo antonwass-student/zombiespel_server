@@ -1,10 +1,3 @@
-//
-//  client_process.c
-//  SDL_net
-//
-//  Created by cristian araya on 08/05/15.
-//  Copyright (c) 2015 project. All rights reserved.
-//
 #ifdef __APPLE__
 #include "SDL2_net/SDL_net.h"
 

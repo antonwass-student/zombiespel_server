@@ -1,10 +1,3 @@
-//
-//  net_msgs.c
-//  SDL_net
-//
-//  Created by cristian araya on 06/05/15.
-//  Copyright (c) 2015 project. All rights reserved.
-//
 #ifdef __APPLE__
 #include "SDL2_net/SDL_net.h"
 
@@ -238,7 +231,9 @@ void SendSyncObjects(Scene* scene){
         Converter_Int32ToBytes(msg, &index, scene->objects[i].rect.y);
         msg[index++]=scene->objects[i].type;
         Converter_Int32ToBytes(msg, &index, strlen(scene->objects[i].name));
+
         //printf("Sent object with namelength = %d\n", strlen(scene->objects[i].name));
+
 
         for(j = 0; j < strlen(scene->objects[i].name); j++)
         {
@@ -263,7 +258,7 @@ void SendClassesFinal()
     {
         if(client[i].status)
         {
-            char buffer[128];
+            unsigned char buffer[128];
             int index = 0;
             buffer[index++] = NET_PLAYER_CLASS_FINAL;
             Converter_Int32ToBytes(buffer, &index, client[i].playerId);
@@ -334,7 +329,7 @@ void SendWeapon(int playerId, ItemType_T type)
 
 void SendArmor(int playerId, int amount)
 {
-    char data[128];
+    unsigned char data[128];
     int index = 0;
 
     data[index++] = NET_PLAYER_ARMOR;
@@ -354,7 +349,7 @@ void SendArmor(int playerId, int amount)
 
 void SendAmmo(int playerId, int amount)
 {
-    char data[128];
+    unsigned char data[128];
     int index = 0;
 
     data[index++] = NET_PLAYER_AMMO;
@@ -434,8 +429,9 @@ void SendPlayerHealth(int playerId, int health)
 
 void SendPlayerClass(PlayerClass_T pClass, char* name)
 {
-    char data[128];
-    int index = 0, nameLength = strlen(name);
+    unsigned char data[128];
+    int index = 0;
+    int nameLength = strlen(name);
 
     data[index++] = NET_PLAYER_CLASS_REC;
     Converter_Int32ToBytes(data, &index, nameLength);
@@ -456,7 +452,7 @@ void SendPlayerClass(PlayerClass_T pClass, char* name)
     }
 }
 
-void RecvPlayerClass(char data[], Scene* scene)
+void RecvPlayerClass(unsigned char data[], Scene* scene)
 {
     int playerId, index = 1;
     PlayerClass_T pClass;

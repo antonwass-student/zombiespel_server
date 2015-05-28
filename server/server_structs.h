@@ -1,16 +1,9 @@
-//
-//  server_structs.h
-//  SDL_net
-//
-//  Created by cristian araya on 08/05/15.
-//  Copyright (c) 2015 project. All rights reserved.
-//
-
 #ifndef __SDL_net__server_structs__
 #define __SDL_net__server_structs__
 
 #ifdef __APPLE__
 #include "SDL2_net/SDL_net.h"
+#include "SDL2/SDL.h"
 
 #elif __linux
 #include "SDL2/SDL_net.h"
@@ -20,8 +13,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <pthread.h>
+//#define M_PI 3.14
 #define N_CLIENTS 4
-
 
 typedef enum{
     NET_CHAT_MSG = 1,
