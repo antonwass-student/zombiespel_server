@@ -4,6 +4,8 @@
 #include "spel_ai.h"
 //#define M_PI 3.14
 
+//Updates all the objects in the scene
+
 int Update(Scene* scene,bool netUpdate)
 {
     int i;

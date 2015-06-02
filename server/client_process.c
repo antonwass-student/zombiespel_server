@@ -9,8 +9,9 @@
 #include "server_structs.h"
 #include "net_msgs.h"
 
+//Function that handles each connected client.
 void* client_process(void* arg)
-{      
+{
         SDLNet_SocketSet set;
         char buffer[512]={0};
         int quit = 0;
@@ -20,7 +21,6 @@ void* client_process(void* arg)
         printf("socket added");
         while (!quit)
         {
-            //SDL_Delay(10);
             if(client[i].socket != NULL){
                 int result = SDLNet_TCP_Recv(client[i].socket, buffer, 511);
                 if(SDLNet_CheckSockets(set, 20000) < 0)
@@ -29,7 +29,7 @@ void* client_process(void* arg)
                     SDLNet_TCP_Close(client[i].socket);
                     client[i].status=NULL;
                     client[i].status=false;
-                    
+
                     quit=true;
                 }
                 if (result <= 0)
@@ -38,7 +38,7 @@ void* client_process(void* arg)
                     client[i].status = false;
                     quit = true;
                     printf("kick out player id %d\n",client[i].playerId);
-                    
+
                     break;
                     //AddToPool(buffer);
                 }
@@ -47,7 +47,7 @@ void* client_process(void* arg)
                 }
             }
         }
-        
+
     return EXIT_SUCCESS;
 }
-    
+

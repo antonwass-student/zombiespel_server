@@ -16,6 +16,8 @@
 #include "spel_objects.h"
 #include "net_msgs.h"
 
+
+//Function to handle incomming connections.
 void* client_handle(void* objs){
     TCPsocket sd, csd, tmp; /* Socket descriptor, Client socket descriptor */
     IPaddress ip, *remoteIP;
@@ -69,7 +71,7 @@ void* client_handle(void* objs){
                         client[i].socket = csd;
                         client[i].status = true;
 
-                        //Väntar på msg 8.
+                        //Waiting until a player name message is received.
                         while (msg[0]!= NET_PLAYER_NAME) {
                             SDLNet_TCP_Recv(client[i].socket, msg, 128);//int nameLenght, str name
                         }
@@ -98,7 +100,7 @@ void* client_handle(void* objs){
                         printf("__________________\n");
                         printf("Player '%s' connected.\n", client[i].name);
                         player = CreatePlayer(2750, 5350, level->nextId++, client[i].name);
-    
+
                         printf("Player object id = %d\n", player.obj_id);
                         client[i].playerId = player.obj_id;//+1500;
 
@@ -112,7 +114,7 @@ void* client_handle(void* objs){
 
                         client[i].pClass = msg[index];
 
-                        for(j = 0; j < 4 ; j++)
+                        for(j = 0; j < 4 ; j++) //Sends the player to the other clients in the lobby.
                         {
                             if(client[j].status)
                             {
@@ -124,7 +126,7 @@ void* client_handle(void* objs){
                         printf("Objects synced. player is ready\n");
                         */
 
-                        pthread_create(&client[i].tid, NULL, &client_process, &i);
+                        pthread_create(&client[i].tid, NULL, &client_process, &i); //Thread that handles the clients messages
                         break;//hittat en ledig plats
                     }
 

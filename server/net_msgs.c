@@ -17,10 +17,12 @@
 msg_stack recvPool;
 pthread_mutex_t pool_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+//Initializes netmessage pool
 void poolInit(){
     recvPool.size=0;
 }
 
+//Initializes the connection array (array with clients)
 void connectionInit()
 {
     int i;
@@ -30,8 +32,8 @@ void connectionInit()
         client[i].ready = false;
     }
 }
-
-int Converter_BytesToInt32(unsigned char data[], int* index){ // Gör om en byte-array till en int.
+//Converts bytes into an int 32
+int Converter_BytesToInt32(unsigned char data[], int* index){
 
     int value = 0;
     value += (((int)data[*index]) << 24);
@@ -44,7 +46,8 @@ int Converter_BytesToInt32(unsigned char data[], int* index){ // Gör om en byte
     return value;
 }
 
-int Converter_Int32ToBytes(unsigned char data[], int* size, int value) //Gör om en int till en byte array.
+//Converts an int to 4 bytes.
+int Converter_Int32ToBytes(unsigned char data[], int* size, int value)
 {
     data[(*size + 3)] = (value);
     data[*size + 2] = ((value) >> 8);
@@ -56,7 +59,8 @@ int Converter_Int32ToBytes(unsigned char data[], int* size, int value) //Gör om
     return 0;
 }
 
-int AddToPool(char* msg) // Funktion fˆr att l‰gga till meddelanden i stacks ( pools).
+//Function that adds messages to the netmessage stack/buffer/pool.
+int AddToPool(char* msg)
 {
 
     pthread_mutex_lock(&pool_mutex);
@@ -218,6 +222,7 @@ void SendPlayerStats(Scene* scene)
     }
 }
 
+//Synchronizes servers objects to the clients.
 void SendSyncObjects(Scene* scene){
     int i,j;
     printf("Sending SyncObjects.\n");
@@ -252,6 +257,7 @@ void SendSyncObjects(Scene* scene){
     }
 }
 
+//Send the players classes to all clients.
 void SendClassesFinal()
 {
     for(int i = 0; i < N_CLIENTS; i++)
@@ -292,6 +298,7 @@ void SendRemoveObject(int objId)
 
 }
 
+//Send the players unique ID to the client.
 void SendPlayerId(int PlayerId){
     unsigned char msg[128];
     int index=1,i;
@@ -512,7 +519,7 @@ void RecvPlayerPos(unsigned char data[], Scene* scene){
                 scene->objects[i].rect.x = x;
                 scene->objects[i].rect.y = y;
                 SendObjectPos(playerId, x, y, angle);
-            
+
 
             break;
         }

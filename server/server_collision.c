@@ -14,9 +14,7 @@ bool MoveObject(GameObject* movingObject, Scene* scene, int speedX, int speedY, 
         if(scene->objects[i].obj_id == movingObject->obj_id)
             continue;
 
-        //printf("Checking ColLeft\n");
-        //printf("MovingObject x=%d, w=%d\n", movingObject->rect.x, movingObject->rect.w);
-       // printf("OtherObject  x=%d, w=%d\n", scene->objects[i].rect.x, scene->objects[i].rect.w);
+
         if(movingObject->rect.x <= scene->objects[i].rect.x + scene->objects[i].rect.w &&
            movingObject->rect.x >= scene->objects[i].rect.x) // kollision vänster av objekt
         {
@@ -125,40 +123,6 @@ void ProximityCheck(GameObject* obj1, GameObject* obj2, int obj1_index,int obj2_
         }
 
     }
-    /*
-    if(obj1->type == OBJECT_PLAYER && obj2->type == OBJECT_NPC){
-        if(obj1->type == OBJECT_PLAYER && distance < 85){
-            if (obj2->ai.atkTimer == 0)
-            {
-                //Attack player
-                obj1->playerInfo.health -= NewDamage(obj2,obj1);
-                obj2->ai.atkTimer = (int)(obj2->ai.atkCd * 60.0f);
-                printf("ai.atkTimer = %d\n", obj2->ai.atkTimer);
-                if(obj1->playerInfo.health <= 0)
-                {
-                    printf("Player died!\n");
-                    obj1->rect.x = 3000;
-                    obj1->rect.y = 5200;
-                    obj1->playerInfo.health = 100;
-                    obj1->ai.target = NULL;
-                }
-                printf("Player health is now: %d\n", obj1->playerInfo.health);
-            }
-        }
-    }*/
-
-
-
-    /*
-    if(obj1->type == OBJECT_NPC&& obj2->type == OBJECT_EXPLOSION){
-        if(obj1->type == OBJECT_NPC && distance < 100){
-            obj1->ai.health -= obj2->ExplosionInfo.damage;
-            if(obj1->ai.health <= 0){
-                printf("NPC died %s! from explosion\nIndex:%d\n",obj1->name,obj1_index);
-                RemoveObjectFromScene(scene, obj1_index);
-            }
-        }
-    }*/
 }
 
 void CollisionHandler(GameObject* collider1, GameObject* collider2, int c1_index, int c2_index, Scene* scene)
@@ -184,10 +148,6 @@ void CollisionHandler(GameObject* collider1, GameObject* collider2, int c1_index
                 RemoveObject(scene, collider2->obj_id);
 
                 return;
-
-
-                //  TODO:::Skapa någon slags drop-funktion.
-                //createObject(scene, OBJECT_ITEM, "MedKit", collider2->rect.x, collider2->rect.y, 50, 50, TXT_MEDKIT, false); //Lägg till create medkit
             }
             else
             {
@@ -203,26 +163,6 @@ void CollisionHandler(GameObject* collider1, GameObject* collider2, int c1_index
                 SendPlayerHealth(collider2->obj_id, collider2->playerInfo.health);
                 RemoveObject(scene, collider1->obj_id);
         }
-
-    }
-    else if(collider1->type == OBJECT_BULLET &&  collider2->type == OBJECT_PLAYER)
-    {/*
-        if (collider1->bulletInfo.type == BULLET_ZOMBIE)
-        {
-            collider2->playerInfo.health -= NewDamage(collider1,collider2);
-            if(collider2->playerInfo.health <= 0)
-            {
-
-                // TODO:: Skapa en respawn funktion. (game over funktion)
-                printf("Player died!\n");
-                collider2->rect.x = 3000;
-                collider2->rect.y = 5200;
-                collider2->playerInfo.health = 100;
-                collider2->ai.target = NULL;
-            }
-            RemoveObject(scene, collider1->obj_id);
-
-        }*/
 
     }
 

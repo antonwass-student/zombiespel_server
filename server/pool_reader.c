@@ -24,15 +24,9 @@ void chat_msg(int n){
         printf("%c",recvPool.queue[n][i]);
     }
     printf("\n");
-
 }
 
-void player_shoot(int n, Scene* scene){
-    //int playerId, int angle
-    //int id = recvPool.queue[n][1];
-    //int angle = recvPool.queue[n][2];
-}
-
+//This function reads the received netmessages and calls function accordingly to the messages ID's.
 int readPool(Scene *scene){
     int i, size;
     if(recvPool.size > 100)
