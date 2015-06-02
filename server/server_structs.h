@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <pthread.h>
-//#define M_PI 3.14
+#define M_PI 3.14
 #define N_CLIENTS 4
 
 typedef enum{

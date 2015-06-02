@@ -10,26 +10,44 @@
 #include "net_msgs.h"
 
 void* client_process(void* arg)
-{
-    char buffer[512]={0};
-    int quit = 0;
-    int i = *(int*) arg;
-    while (!quit)
-    {
-        //SDL_Delay(10);
-
-        if (SDLNet_TCP_Recv(client[i].socket, buffer, 512) > 0)
+{      
+        SDLNet_SocketSet set;
+        char buffer[512]={0};
+        int quit = 0;
+        int i = *(int*) arg;
+        set = SDLNet_AllocSocketSet(1);
+        SDLNet_TCP_AddSocket(set, client[i].socket);
+        printf("socket added");
+        while (!quit)
         {
-            AddToPool(buffer);
-            if(strcmp(buffer, "exit") == 0)	/* Terminate this connection */
-            {
-                quit = 1;
-                printf("Terminate connection\n");
+            //SDL_Delay(10);
+            if(client[i].socket != NULL){
+                int result = SDLNet_TCP_Recv(client[i].socket, buffer, 511);
+                if(SDLNet_CheckSockets(set, 20000) < 0)
+                {
+                    printf("Socket receive error! %d \n",i);
+                    SDLNet_TCP_Close(client[i].socket);
+                    client[i].status=NULL;
+                    client[i].status=false;
+                    
+                    quit=true;
+                }
+                if (result <= 0)
+                {
+                    SDLNet_TCP_Close(client[i].socket);
+                    client[i].status = false;
+                    quit = true;
+                    printf("kick out player id %d\n",client[i].playerId);
+                    
+                    break;
+                    //AddToPool(buffer);
+                }
+                else{
+                    AddToPool(buffer);
+                }
             }
         }
-
-    }
-    SDLNet_TCP_Close(client[i].socket);
-    client[i].status = false;
+        
     return EXIT_SUCCESS;
 }
+    

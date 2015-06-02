@@ -98,7 +98,7 @@ void* client_handle(void* objs){
                         printf("__________________\n");
                         printf("Player '%s' connected.\n", client[i].name);
                         player = CreatePlayer(2750, 5350, level->nextId++, client[i].name);
-
+    
                         printf("Player object id = %d\n", player.obj_id);
                         client[i].playerId = player.obj_id;//+1500;
 

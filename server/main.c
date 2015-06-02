@@ -14,6 +14,7 @@ exit
 #include "SDL2/SDL_net.h"
 #endif
 
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,6 +33,10 @@ exit
 
 int nextId = 0;
 
+void handler (int s){
+    printf("hah");
+
+}
 
 int main(int argc, char **argv)
 {
@@ -50,7 +55,7 @@ int main(int argc, char **argv)
     level.objCount = 0;
     level.nextId = 100;
 
-    poolInit();
+    signal(SIGPIPE,handler);
     connectionInit();
     pthread_t listener;
     printf("Starting listener thread.\n");
