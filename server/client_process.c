@@ -8,6 +8,7 @@
 #include "client_process.h"
 #include "server_structs.h"
 #include "net_msgs.h"
+#include "spel_ai.h"
 
 //Function that handles each connected client.
 void* client_process(void* arg)
@@ -38,11 +39,11 @@ void* client_process(void* arg)
                     client[i].status = false;
                     quit = true;
                     printf("kick out player id %d\n",client[i].playerId);
-
+                    SendRemoveObject(client[i].playerId);
                     break;
-                    //AddToPool(buffer);
                 }
-                else{
+                else
+                {
                     AddToPool(buffer);
                 }
             }

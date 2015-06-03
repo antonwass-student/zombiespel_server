@@ -33,15 +33,10 @@ exit
 
 int nextId = 0;
 
-void handler (int s){
-    printf("hah");
-
-}
 
 int main(int argc, char **argv)
 {
     int deltaTime = SDL_GetTicks();
-    int i;
     bool lobbyReady = false;
     //bool anyoneHere = false;
     //GameObject objects[100];
@@ -55,17 +50,18 @@ int main(int argc, char **argv)
     level.objCount = 0;
     level.nextId = 100;
 
-    signal(SIGPIPE,handler);
     connectionInit();
     pthread_t listener;
     printf("Starting listener thread.\n");
     pthread_create(&listener,NULL, &client_handle, (void*)&level);
 
-    for(i=0;i<15;i++){ //Creates 15 zombie spitters
+    for(int i=0;i<15;i++) //Creates 15 zombie spitters
+    {
         newObject=CreateZombieSpitter(1500 + 200*i,4000, level.nextId++);
         AddObject(&level, newObject, false);
     }
-    for(i=0;i<15;i++){ //Creates 15 zombies
+    for(int i=0;i<15;i++) //Creates 15 zombies
+    {
         newObject=CreateZombieSpitter(1500 + 200*i,3800, level.nextId++);
         AddObject(&level, newObject, false);
     }
@@ -77,7 +73,7 @@ int main(int argc, char **argv)
     {
         readPool(&level);
 
-        for(i = 0; i < N_CLIENTS; i++)
+        for(int i = 0; i < N_CLIENTS; i++)
         {
             if(client[i].status)
             {
@@ -94,7 +90,8 @@ int main(int argc, char **argv)
             }
         }
 
-        if (deltaTime < 17){
+        if (deltaTime < 17)
+        {
             SDL_Delay(17-deltaTime);
             //printf("%d\n",17-deltaTime);
         }
@@ -179,10 +176,10 @@ int main(int argc, char **argv)
         int netLoad;
         //This module is used to limit the messages sent to the client. 5 messages per second
         netUpdateTimer--;
-        if(netUpdateTimer==0){
+        if(netUpdateTimer==0)
+        {
             netUpdate=true;
             netUpdateTimer=netUpdateRate;
-
         }
         netLoad = readPool(&level);//Reads all the netmessages from the clients
 
@@ -190,7 +187,8 @@ int main(int argc, char **argv)
 
         //Limits the updaterate to 60 times per second
         deltaTime = SDL_GetTicks() - deltaTime;
-        if (deltaTime < 17){
+        if (deltaTime < 17)
+        {
             SDL_Delay(17-deltaTime);
             if(17-deltaTime < 5)
                 printf("***Warning***\n high server load = %d\n**********\n",17-deltaTime);

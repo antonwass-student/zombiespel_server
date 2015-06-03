@@ -18,56 +18,52 @@ int AddObject(Scene* scene, GameObject object, bool net)
     scene->objects[scene->objCount] = object;
     scene->objCount++;
     SDL_UnlockMutex(scene->obj_mutex);
-
-    //skicka till klienterna
+    
+    //send to client
     if(net)
     {
         if(object.type == OBJECT_ITEM)
         {
             SendNewObject(object.obj_id, object.rect.x, object.rect.y, object.itemInfo.type, object.name);
-            //printf("debug2\n");
         }
         else
         {
             SendNewObject(object.obj_id, object.rect.x, object.rect.y, object.type, object.name);
-            printf("debug2\n");
         }
-
+        
     }
-
-
+    
     return 0;
 }
 
 int RemoveObject(Scene* scene, int id)
 {
-    int index= -1, i;
+    int index= -1;
     SDL_LockMutex(scene->obj_mutex);
-    for(i=0;i<scene->objCount;i++)
+    
+    for(int i=0;i<scene->objCount;i++)
     {
         if(scene->objects[i].obj_id==id)
         {
-            //printf("Object removed with id %d\n", id);
             SendRemoveObject(id);
             index=i;
             break;
         }
-
     }
-
-    if(index==-1){
+    
+    if(index==-1)
+    {
         SDL_UnlockMutex(scene->obj_mutex);
         return -1;
     }
-
-
-    for(i=index;i<scene->objCount-1;i++)
+    
+    for(int i=index;i<scene->objCount-1;i++)
     {
         scene->objects[i]=scene->objects[i+1];
     }
     scene->objCount--;
     SDL_UnlockMutex(scene->obj_mutex);
-
+    
     return 0;
 }
 
@@ -82,12 +78,12 @@ GameObject CreateMachineGun(int x, int y, int id)
     object.type = OBJECT_ITEM;
     object.solid = false;
     strcpy(object.name, "Machine gun\0");
-
+    
     object.itemInfo.type = ITEM_WEAPON_1;
     object.itemInfo.amount = 1;
-
+    
     printf("Machine gun created\n");
-
+    
     return object;
 }
 
@@ -102,12 +98,12 @@ GameObject CreateShotgun(int x, int y, int id)
     object.type = OBJECT_ITEM;
     object.solid = false;
     strcpy(object.name, "Shotgun\0");
-
+    
     object.itemInfo.type = ITEM_WEAPON_2;
     object.itemInfo.amount = 1;
-
+    
     printf("Shotgun created\n");
-
+    
     return object;
 }
 
@@ -122,12 +118,12 @@ GameObject CreateRevolver(int x, int y, int id)
     object.type = OBJECT_ITEM;
     object.solid = false;
     strcpy(object.name, "Revolver\0");
-
+    
     object.itemInfo.type = ITEM_WEAPON_3;
     object.itemInfo.amount = 1;
-
+    
     printf("Revolver created\n");
-
+    
     return object;
 }
 
@@ -142,12 +138,12 @@ GameObject CreateArmor(int x, int y, int id)
     object.type = OBJECT_ITEM;
     object.solid = false;
     strcpy(object.name, "Armor\0");
-
+    
     object.itemInfo.type = ITEM_ARMOR;
     object.itemInfo.amount = 20;
-
+    
     printf("Armor created\n");
-
+    
     return object;
 }
 
@@ -162,12 +158,12 @@ GameObject CreateAmmo(int x, int y, int id)
     object.type = OBJECT_ITEM;
     object.solid = false;
     strcpy(object.name, "Ammo\0");
-
+    
     object.itemInfo.type = ITEM_AMMO;
     object.itemInfo.amount = 20;
-
+    
     printf("Ammo created\n");
-
+    
     return object;
 }
 
@@ -182,12 +178,12 @@ GameObject CreateMedkit(int x, int y, int id)
     object.type = OBJECT_ITEM;
     object.solid = false;
     strcpy(object.name, "Medkit\0");
-
+    
     object.itemInfo.type = ITEM_MEDKIT;
     object.itemInfo.amount = 40;
-
+    
     printf("Medkit created\n");
-
+    
     return object;
 }
 
@@ -202,7 +198,7 @@ GameObject CreateZombie(int x, int y, int id)
     object.type=OBJECT_NPC;
     object.solid = false;
     strcpy(object.name, "Zombie");
-
+    
     object.ai.health = 100;
     object.ai.attackRange = 100;
     object.ai.detectRange = 700;
@@ -228,7 +224,7 @@ GameObject CreateZombieSpitter(int x, int y, int id)
     object.type=OBJECT_ZOMBIE_SPITTER;
     object.solid = false;
     strcpy(object.name, "ZombieSpitter");
-
+    
     object.ai.health = 100;
     object.ai.attackRange = 600;
     object.ai.detectRange = 700;
@@ -240,13 +236,12 @@ GameObject CreateZombieSpitter(int x, int y, int id)
     object.ai.target = NULL;
     object.ai.tsCounter=60;
     object.ai.tsFreq=30;
-
+    
     object.ai.fireRate = 60;
     object.ai.fireCount = 60;
     object.ai.bulletSpeed = 5;
     return object;
 }
-
 
 GameObject CreatePlayer(int x, int y, int id, char* name)
 {
@@ -256,12 +251,12 @@ GameObject CreatePlayer(int x, int y, int id, char* name)
     object.rect.w = 128;
     object.rect.h = 128;
     object.obj_id = id;
-
+    
     strcpy(object.name,name);
     object.playerInfo.alive = true;
     object.playerInfo.health = 100;
     object.playerInfo.ammoTotal = 0;
-
+    
     object.type = OBJECT_PLAYER;
     return object;
 }
@@ -275,16 +270,13 @@ GameObject CreateBullet(int id, int x, int y, int damage, int direction, int vel
     object.rect.h = 20;
     object.obj_id = id;
     object.type = OBJECT_BULLET;
-
+    
     object.bulletInfo.angle = direction;
     object.bulletInfo.damage = damage;
     object.bulletInfo.velocity = velocity;
     object.bulletInfo.type = bType;
     object.bulletInfo.timetolive = 120;
-
-    //printf("new bullet x = %d, y = %d\n", x, y);
-
-
+    
     return object;
-
+    
 }

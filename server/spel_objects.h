@@ -1,7 +1,6 @@
 #ifndef __SDL_net__spel_objects__
 #define __SDL_net__spel_objects__
 
-#include <stdio.h>
 #include "server_structs.h"
 
 int AddObject(Scene* scene, GameObject object, bool net);

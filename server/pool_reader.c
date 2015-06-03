@@ -12,27 +12,28 @@
 #include "server_structs.h"
 #include "spel_objects.h"
 
-
-void chat_msg(int n){
-    //string msg, string sender (ändra till playerId och sätta först??)
-    //char msg[128];
-    int i;
-    for (i=1; i<512; i++) {
-        if (recvPool.queue[n][i]== '\n' || recvPool.queue[n][i]== '\0' ) {
+void chat_msg(int n)
+{
+    for (int i=1; i<512; i++)
+    {
+        if (recvPool.queue[n][i]== '\n' || recvPool.queue[n][i]== '\0' )
+        {
             break;
         }
         printf("%c",recvPool.queue[n][i]);
     }
     printf("\n");
+    
 }
 
 //This function reads the received netmessages and calls function accordingly to the messages ID's.
-int readPool(Scene *scene){
-    int i, size;
+int readPool(Scene *scene)
+{
+    int size;
     if(recvPool.size > 100)
         printf("****Warning****\nHigh NetworkLoad: %d/128\n********", recvPool.size);
-
-    for(i=0;i<recvPool.size;i++){
+    
+    for(int i=0;i<recvPool.size;i++){
         switch (recvPool.queue[i][0]) {
             case 1: //chatt
                 printf("%s",recvPool.queue[i]);
@@ -45,7 +46,6 @@ int readPool(Scene *scene){
                 RecvPlayerPos(recvPool.queue[i], scene);
                 break;
             case NET_PLAYER_SHOOT: //player_shoot
-                //printf("Received shoot from player\n");
                 RecvPlayerShoot(recvPool.queue[i], scene);
                 break;
             case 8: //send player_name
@@ -65,5 +65,5 @@ int readPool(Scene *scene){
     size = recvPool.size;
     recvPool.size = 0;
     return size;
-
+    
 }

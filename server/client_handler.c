@@ -18,10 +18,11 @@
 
 
 //Function to handle incomming connections.
-void* client_handle(void* objs){
+void* client_handle(void* objs)
+{
     TCPsocket sd, csd, tmp; /* Socket descriptor, Client socket descriptor */
     IPaddress ip, *remoteIP;
-    int listening = 1, i=0,j=0;
+    int listening = 1;
     int sockets_available=1;
 
     Scene *level = (Scene*)objs;// = *(GameObject*) objs;
@@ -65,14 +66,17 @@ void* client_handle(void* objs){
             if (sockets_available)
             {
                 unsigned char msg[128] = {0};
-                for(i=0; i<N_CLIENTS;i++){
-                    if(client[i].status == false){
+                for(int i=0; i<N_CLIENTS;i++)
+                {
+                    if(client[i].status == false)
+                    {
                         printf("Client accepted at index %d\n", i);
                         client[i].socket = csd;
                         client[i].status = true;
 
                         //Waiting until a player name message is received.
-                        while (msg[0]!= NET_PLAYER_NAME) {
+                        while (msg[0]!= NET_PLAYER_NAME)
+                        {
                             SDLNet_TCP_Recv(client[i].socket, msg, 128);//int nameLenght, str name
                         }
 
@@ -80,11 +84,12 @@ void* client_handle(void* objs){
                         int nameLength = Converter_BytesToInt32(msg, &index);
 
                         //printf("Length = '%d'\n", nameLength);
-                        for (j = 0; j<nameLength; j++) {
+                        for (int j = 0; j<nameLength; j++)
+                        {
                             client[i].name[j] = (char) msg[j+index];
                         }
 
-                        for(j = 0; j< 4;j++)
+                        for(int j = 0; j< N_CLIENTS;j++)
                         {
                             if(!strcmp(client[j].name, client[i].name) && i != j)
                             {
@@ -114,20 +119,16 @@ void* client_handle(void* objs){
 
                         client[i].pClass = msg[index];
 
-                        for(j = 0; j < 4 ; j++) //Sends the player to the other clients in the lobby.
+                        for(int j = 0; j < N_CLIENTS ; j++) //Sends the player to the other clients in the lobby.
                         {
                             if(client[j].status)
                             {
                                 SendLobbyPlayer(client[j].name, client[j].pClass, client[j].playerId);
                             }
                         }
-                        /*
-                        SendSyncObjects(i, level);
-                        printf("Objects synced. player is ready\n");
-                        */
 
                         pthread_create(&client[i].tid, NULL, &client_process, &i); //Thread that handles the clients messages
-                        break;//hittat en ledig plats
+                        break;//found a empty space
                     }
 
                 }

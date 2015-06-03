@@ -10,9 +10,10 @@
 #include "SDL2/SDL.h"
 #endif
 
-#include <stdio.h>
+
 #include <stdbool.h>
 #include <pthread.h>
+
 #define M_PI 3.14
 #define N_CLIENTS 4
 
@@ -88,10 +89,11 @@ typedef struct  {
     char name[20];
     int playerId;
     TCPsocket socket;
-    bool status; //för återanvändning
+    bool status; //for recycling
     bool ready;
     pthread_t tid;
     PlayerClass_T pClass;
+    bool targetIsAlive;
 }Connections;
 
 typedef struct{
@@ -152,6 +154,8 @@ typedef struct{
 
     //Player
     PlayerInfo playerInfo;
+    
+    Connections connetions;
 
 }GameObject;
 

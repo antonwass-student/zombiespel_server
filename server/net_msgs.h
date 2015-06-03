@@ -1,7 +1,6 @@
 #ifndef __SDL_net__net_msgs__
 #define __SDL_net__net_msgs__
 
-#include <stdio.h>
 #include "server_structs.h"
 extern msg_stack recvPool;
 

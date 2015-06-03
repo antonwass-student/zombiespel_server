@@ -4,7 +4,6 @@
 #include <SDL2/SDL.h>
 #include "server_structs.h"
 
-
 int GetDistance(SDL_Rect obj1, SDL_Rect obj2);
 bool MoveObject(GameObject* movingObject, Scene* scene, int speedX, int speedY, int objectIndex);
 int NewDamage(GameObject* NPC, GameObject* Player);
