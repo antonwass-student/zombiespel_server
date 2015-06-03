@@ -9,29 +9,29 @@ bool MoveObject(GameObject* movingObject, Scene* scene, int speedX, int speedY, 
     movingObject->rect.x += speedX;
     movingObject->rect.y += speedY;
     
-    for(int i = 0; i < scene->objCount; i++) // Kollar kollision mellan alla objekt i scene
+    for(int i = 0; i < scene->objCount; i++) // Viewing Collision Between all the objects in the same scene
     {
         if(scene->objects[i].obj_id == movingObject->obj_id)
             continue;
         
         if(movingObject->rect.x <= scene->objects[i].rect.x + scene->objects[i].rect.w &&
-           movingObject->rect.x >= scene->objects[i].rect.x) // kollision vänster av objekt
+           movingObject->rect.x >= scene->objects[i].rect.x) ////Collision from the left side of item.
         {
             colLeft = true;
         }
         else if(movingObject->rect.x + movingObject->rect.w  >= scene->objects[i].rect.x &&
-                movingObject->rect.x + movingObject->rect.w  <= scene->objects[i].rect.x + scene->objects[i].rect.w) // kollision höger av objekt
+                movingObject->rect.x + movingObject->rect.w  <= scene->objects[i].rect.x + scene->objects[i].rect.w) //Collision from the right side of moved object.
         {
             colRight = true;
         }
         
         if(movingObject->rect.y <= scene->objects[i].rect.y + scene->objects[i].rect.h &&
-           movingObject->rect.y >= scene->objects[i].rect.y) // kollision ovanifrån objekt
+           movingObject->rect.y >= scene->objects[i].rect.y) // collision from above the items
         {
             colUp = true;
         }
         else if(movingObject->rect.y + movingObject->rect.h >= scene->objects[i].rect.y &&
-                movingObject->rect.y + movingObject->rect.h <= scene->objects[i].rect.y + scene->objects[i].rect.h) // kollision underifrån objekt
+                movingObject->rect.y + movingObject->rect.h <= scene->objects[i].rect.y + scene->objects[i].rect.h) //Collision with the uppder side of item
         {
             colDown = true;
         }
@@ -41,7 +41,7 @@ bool MoveObject(GameObject* movingObject, Scene* scene, int speedX, int speedY, 
             CollisionHandler(movingObject, &scene->objects[i], objectIndex, i, scene);
         }
         
-        if(movingObject->solid && scene->objects[i].solid) //Rättar till positionen om en kollision uppsttått
+        if(movingObject->solid && scene->objects[i].solid) //If both objects are solid, the moving object must be moved back to its original position
         {
             if(colLeft && (colUp || colDown))
             {
