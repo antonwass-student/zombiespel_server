@@ -107,8 +107,12 @@ SDL_Rect* FindPlayer(Scene* scene, GameObject* zombie, int range)
     for(int i = 0; i < scene->objCount ; i++)
     {
         int distance = 10;
-
-        if(scene->objects[i].type == OBJECT_PLAYER && scene->objects[i].playerInfo.alive)
+        
+        if(scene->objects[i].playerInfo.health<=0)
+            scene->objects[i].playerInfo.alive=false;
+            
+            
+        if(scene->objects[i].type == OBJECT_PLAYER && scene->objects[i].playerInfo.alive==true)
         {
             distance = (int)(sqrt(pow(zombie->rect.x - scene->objects[i].rect.x, 2) + pow(zombie->rect.y - scene->objects[i].rect.y, 2)));
             
